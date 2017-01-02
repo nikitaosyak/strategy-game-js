@@ -103,7 +103,7 @@
     <inspection_tool class="Duplicates" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <scope name="client libraries" level="WEAK WARNING" enabled="false" />
     </inspection_tool>
-    <inspection_tool class="DynamicallyGeneratedCodeJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="DynamicallyGeneratedCodeJS" enabled="false" level="WARNING" enabled_by_default="false">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="ES6BindWithArrowFunction" enabled="true" level="WARNING" enabled_by_default="true">
@@ -119,6 +119,7 @@
       <scope name="client libraries" level="INFORMATION" enabled="false" />
     </inspection_tool>
     <inspection_tool class="ES6ModulesDependencies" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <scope name="mocha" level="WEAK WARNING" enabled="false" />
       <scope name="client libraries" level="WEAK WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="ES6UnusedImports" enabled="true" level="WARNING" enabled_by_default="true">
@@ -439,6 +440,7 @@
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="NodeModulesDependencies" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <scope name="mocha" level="WEAK WARNING" enabled="false" />
       <scope name="client libraries" level="WEAK WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="NonBlockStatementBodyJS" enabled="false" level="WEAK WARNING" enabled_by_default="false">
