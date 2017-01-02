@@ -1,0 +1,11 @@
+{
+    "system": {
+        "port": 8181
+    },
+    "game": {
+        "gameUpdateFrequency": 1000,
+        "turnTime": 10,
+        "turnPauseTime": 1,
+        "userStaleTime": 30
+    }
+}

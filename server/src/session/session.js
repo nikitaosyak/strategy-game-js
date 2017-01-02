@@ -1,0 +1,168 @@
+'use strict'
+
+module.exports.createSession = (token, user1, user2) => {
+    const settings = require('./../util/settings').content
+    const player = require('./player')
+
+    const State = {
+        WAITING_USERS: 'waiting_users',
+        TURN_IN_PROGRESS: 'turn_in_progress',
+        BETWEEN_TURN_PAUSE: 'between_turn_pause',
+        SESSION_ENDED: 'session_ended'
+    }
+
+    const _users = [user1, user2]
+    const _players = []
+
+    let _turn = 0
+    let _turnCommands = []
+
+
+    let _countStarted = 0
+
+    let _state = State.WAITING_USERS
+
+    //
+    // inner play logic
+    const _startTurn = () => {
+        _countStarted = Date.now()
+        _state = State.TURN_IN_PROGRESS
+        console.log('Session: new turn #%d', _turn)
+    }
+
+    const _endTurn = () => {
+        const turnCommandsStr = JSON.stringify({status: 'OK', commands: _turnCommands})
+        _turnCommands = []
+        // console.log('Session: will send commands: %s', turnCommandsStr)
+        _players.forEach((p, i) => {
+            if (_state == State.SESSION_ENDED) return
+
+            if (p.getUser().isStale()) {
+                console.log('Session:endTurn: user %d is stale!', i)
+                _endSession()
+                return
+            }
+
+            const hook = p.getTurnHook()
+            if (hook === null) {
+                console.log(p.getUser().getToken() + ': Hook not set!')
+                _endSession()
+                return
+            }
+            request.send_ok(hook, turnCommandsStr)
+            p.resetTurnState()
+        })
+
+        _state = State.BETWEEN_TURN_PAUSE
+        _countStarted = Date.now()
+        console.log('Session: end of turn #%d', _turn)
+
+        _turn += 1
+    }
+
+    const _endSession = () => {
+        // todo: this shit requires proper destruction
+        _state = State.SESSION_ENDED
+    }
+
+    //
+    // public methods
+    const self = {
+        isDone: () => State == State.SESSION_ENDED,
+        getToken: () => _token,
+        getPlayer: (userToken) => {
+            for (let i = 0; i < _players.length; i++) {
+                const user = _players[i].getUser()
+                if (user.getToken() == userToken) return _players[i]
+            }
+            return null
+        },
+
+        //
+        // user commands
+        userReady: (userToken) => {
+            let success = false
+            _users.forEach(user => {
+                if (user.getToken() == userToken) {
+                    console.log('Session:userReady: approving player %s', user.getToken())
+                    _players.push(player.createPlayer(user))
+                    success = true
+                }
+            })
+
+            if (_players.length == _users.length) {
+                console.log('Session:userReady: all users are ready! match starting!')
+                _startTurn()
+            }
+            return success
+        },
+
+        storeHook: (userToken, turnNumber, response) => {
+            if (turnNumber != _turn) return false
+            const p = self.getPlayer(userToken)
+            if (p === null) {
+                _endSession()
+                return false
+            }
+
+
+            if (p.setTurnHook(response)) {
+                return true
+            }
+            _endSession()
+            return false
+        },
+
+        storeCommands: (value) => {
+            let success = true
+            const commandList = JSON.parse(value)
+            commandList.forEach(cmd => {
+                if (cmd.turn == _turn) {
+                    console.log('player %s commands: %s', cmd.user_token, cmd.command)
+                    _turnCommands.push(cmd)
+                } else {
+                    success = false
+                }
+            })
+            return success
+        },
+
+        flushTurn: (userToken, turnNumber) => {
+            if (turnNumber != _turn) return false
+            const p = self.getPlayer(userToken)
+            if (p === null) return false
+            p.flushTurn()
+        },
+
+        //
+        // update
+        update: () => {
+            if (_state == State.SESSION_ENDED) return
+
+            const elapsed = (Date.now() - _countStarted) / 1000
+            // console.log('turn time: %i. turn state: %s', elapsed, _state)
+
+            if (_state == State.TURN_IN_PROGRESS) {
+                if (elapsed >= settings.game.turnTime) { // turn ended due to timeout
+                    _endTurn()
+                } else {                     // turn ended due to players flush
+                    let flushes = 0
+                    for (let i = 0; i < _players.length; i++) {
+                        if (_players[i].getTurnFlushed()) {
+                            flushes += 1
+                        }
+                    }
+                    if (flushes == _players.length) {
+                        _endTurn()
+                    }
+                }
+            }
+
+            if (_state == State.BETWEEN_TURN_PAUSE && elapsed >= settings.game.turnPauseTime) {
+                _startTurn()
+            }
+        }
+    }
+
+    return self
+}

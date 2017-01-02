@@ -1,5 +1,4 @@
-//
-// utility methods for routing and response writing
+'use strict'
 
 exports.send_ok_standard = (res) => {
     res.writeHead(200, {'Content-type': 'application/json'})
@@ -21,7 +20,7 @@ exports.send_fail = (res, str_data) => {
     res.end(str_data)
 }
 
-exports.standartRequestHandle = (response, task, errLog, answer = null) => {
+exports.standardRequestHandle = (response, task, errLog, answer = null) => {
     try {
         const success = task()
         if (success) {
