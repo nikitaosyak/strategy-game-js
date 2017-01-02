@@ -3,7 +3,8 @@
 module.exports.createSettings = () => {
     console.info('Settings: creating')
     const fs = require('fs')
-    const content = fs.readFileSync('./settings.json')
+    const path = require('path')
+    const content = fs.readFileSync(path.join(process.cwd(), 'assets', 'settings.json'))
     module.exports.content = JSON.parse(content)
 
     console.info('Settings: loaded file content: ')
