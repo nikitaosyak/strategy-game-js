@@ -1,0 +1,9 @@
+{
+  "name": "conjurer-wars-js",
+  "version": "0.0.0",
+  "author": "grozamorei",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1"
+  }
+}
