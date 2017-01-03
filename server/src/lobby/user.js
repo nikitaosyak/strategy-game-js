@@ -1,7 +1,6 @@
 'use strict'
 
 module.exports.createUser = (token) => {
-    const settings = require('./../util/settings')
     let lastUpdateTime = Date.now()
 
     const self = {
@@ -21,7 +20,7 @@ module.exports.createUser = (token) => {
             }
             return success
         },
-        isStale: () => (Date.now() - lastUpdateTime) / 1000 > settings.game.userStaleTime,
+        isStale: () => (Date.now() - lastUpdateTime) > settings.game.userStaleTime,
     }
     return self
 }
