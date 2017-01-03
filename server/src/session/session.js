@@ -164,5 +164,15 @@ module.exports.createSession = (token, user1, user2) => {
         }
     }
 
+    if (ENV == 'TEST') {
+        self.State = State
+        self._users = _users
+        self._players = _players
+        self._getTurn = () => _turn
+        self._turnCommands = _turnCommands
+        self._getCountStarted = () => _countStarted
+        self._getState = () => _state
+    }
+
     return self
 }
