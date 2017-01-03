@@ -25,7 +25,7 @@ describe('Lobby tests', () => {
         })
 
         it('game lobby should contain user of given token', () => {
-            let user = util.appState.game.getUser(serverResponse.token)
+            let user = util.appState.lobby.getUser(serverResponse.token)
             util.assert.notEqual(user, null)
             util.assert.notEqual(user, undefined)
             util.assert.equal(user.getToken(), serverResponse.token)
@@ -36,15 +36,15 @@ describe('Lobby tests', () => {
     describe('#second user just to be sure:', createUser)
     describe('#check users integrity:', () => {
         it('game lobby should contain exactly 2 users', () => {
-            util.assert.equal(util.appState.game._users.size, 2)
+            util.assert.equal(util.appState.lobby._users.size, 2)
         })
 
         it('game lobby should not contain any sessions', () => {
-            util.assert.equal(util.appState.game._sessions.size, 0)
+            util.assert.equal(util.appState.lobby._sessions.size, 0)
         })
 
         it('waiting queue should be empty at this point', () => {
-            util.assert.equal(util.appState.game._waitingQueue.length, 0)
+            util.assert.equal(util.appState.lobby._waitingQueue.length, 0)
         })
     })
 
@@ -74,23 +74,23 @@ describe('Lobby tests', () => {
 
     describe('#correct lobby state:', () => {
         it('lobby now should contain correct session with given token', () => {
-            const s = util.appState.game.getSession(sessionToken)
+            const s = util.appState.lobby.getSession(sessionToken)
             util.assert.notEqual(s, null)
             util.assert.notEqual(s, undefined)
         })
 
         it('lobby should contain exactly one session', () => {
-            util.assert.equal(util.appState.game._sessions.size, 1)
+            util.assert.equal(util.appState.lobby._sessions.size, 1)
         })
 
         it('lobby should contain zero users in the queue', () => {
-            util.assert.equal(util.appState.game._waitingQueue, 0)
+            util.assert.equal(util.appState.lobby._waitingQueue, 0)
         })
     })
 
     describe('#correct session state: WAITING_USERS: ', () => {
         it('users present', () => {
-            const s = util.appState.game.getSession(sessionToken)
+            const s = util.appState.lobby.getSession(sessionToken)
             util.assert.equal(s._users.length, 2)
             for (let i = 0; i < s._users.length; i++) {
                 util.assert.notEqual(users.indexOf(s._users[i].getToken()), -1)
@@ -98,17 +98,17 @@ describe('Lobby tests', () => {
         })
 
         it('players absent', () => {
-            const s = util.appState.game.getSession(sessionToken)
+            const s = util.appState.lobby.getSession(sessionToken)
             util.assert.equal(s._players.length, 0)
         })
 
         it('turn is zero', () => {
-            const s = util.appState.game.getSession(sessionToken)
+            const s = util.appState.lobby.getSession(sessionToken)
             util.assert.equal(s._getTurn(), 0)
         })
 
         it('state is correct', () => {
-            const s = util.appState.game.getSession(sessionToken)
+            const s = util.appState.lobby.getSession(sessionToken)
             util.assert.equal(s._getState(), s.State.WAITING_USERS)
         })
     })

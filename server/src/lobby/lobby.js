@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports.createGame = () => {
+module.exports.createLobby = () => {
     const mod_token = require('rand-token')
     const request = require('../util/request_util')
     const user = require('./user')

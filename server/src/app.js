@@ -22,19 +22,19 @@ module.exports.runApp = (testingPort, testingFrequency) => {
     const http = require('http')
 
     const settings = require('./util/settings').createSettings()
-    const game = require('./lobby/game').createGame();
-    const router = require('./router').createRouter(game)
+    const lobby = require('./lobby/lobby').createLobby();
+    const router = require('./router').createRouter(lobby)
 
     const server = http.createServer((req, res) => router.route(req, res));
     server.listen(ENV == 'TEST' ? testingPort : settings.system.port, () => {
         Logger.info('server successfully run on ', settings.system.port)
     })
-    setInterval(game.update, ENV == 'TEST' ? testingFrequency : settings.game.gameUpdateFrequency)
+    setInterval(lobby.update, ENV == 'TEST' ? testingFrequency : settings.lobby.gameUpdateFrequency)
 
     if (ENV == 'TEST') {
         return {
             settings: settings,
-            game: game,
+            lobby: lobby,
             router: router,
             server: server
         }
