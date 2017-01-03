@@ -110,10 +110,15 @@ module.exports.createRouter = (game) => {
 // :3
     dispatcher.onError((req, res) => {
         res.writeHead(404, {'Content-type': 'application/json'})
-        res.end(JSON.stringify({message: 'invalid url'}))
+        res.end(JSON.stringify({message: 'invalid url', path: req.url}))
+    })
+
+    dispatcher.onGet('/ping', (req, res) => {
+        res.writeHead(200, {'Content-type': 'application/json'})
+        res.end(JSON.stringify({message: 'pong'}))
     })
 
     return {
-        route: (request, response) => dispatcher.dispatch(request, response)
+        route: (req, res) => dispatcher.dispatch(req, res)
     }
 }
