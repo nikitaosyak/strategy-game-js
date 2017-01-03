@@ -9,6 +9,7 @@ gulp.task('server-tests', function () {
             cwd: 'server/src',
             c: true,
             R: 'spec',
+            b: true,
             env: {NODE_ENV: 'TEST'}
         }))
 })
