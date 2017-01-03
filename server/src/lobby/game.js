@@ -3,7 +3,6 @@
 module.exports.createGame = () => {
     const mod_token = require('rand-token')
     const request = require('../util/request_util')
-    const settings = require('../util/settings').content
     const user = require('./user')
     const session = require('../session/session')
 
@@ -109,6 +108,12 @@ module.exports.createGame = () => {
             Logger.log('Game.queue: user %s added. queue len: %d', token, _waitingQueue.length)
             return true
         }
+    }
+
+    if (ENV == 'TEST') {
+        self._users = _users
+        self._sessions = _sessions
+        self._waitingQueue = _waitingQueue
     }
     return self;
 }

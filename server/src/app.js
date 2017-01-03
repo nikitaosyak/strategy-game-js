@@ -1,11 +1,11 @@
 'use strict'
 
-module.exports.RunApp = (testingPort) => {
+module.exports.runApp = (testingPort) => {
     global.Logger = require('js-logger')
     Logger.useDefaults()
 
-    const env = process.env.NODE_ENV
-    switch(env) {
+    global.ENV = process.env.NODE_ENV
+    switch(ENV) {
         case 'TEST':
             Logger.setLevel(Logger.ERROR)
             break
@@ -16,7 +16,7 @@ module.exports.RunApp = (testingPort) => {
             Logger.setLevel(Logger.OFF)
             break
         default:
-            console.warn('Unknown node.env: %s. logger is ON', env)
+            console.warn('Unknown node.env: %s. logger is ON', ENV)
     }
 
     const http = require('http')
@@ -26,12 +26,25 @@ module.exports.RunApp = (testingPort) => {
     const router = require('./router').createRouter(game)
 
     const server = http.createServer((req, res) => router.route(req, res));
-    server.listen(env == 'TEST' ? testingPort : settings.system.port, () => {
+    server.listen(ENV == 'TEST' ? testingPort : settings.system.port, () => {
         Logger.info('server successfully run on ', settings.system.port)
     })
     setInterval(game.update, settings.game.gameUpdateFrequency)
+
+    if (ENV == 'TEST') {
+        return {
+            settings: settings,
+            game: game,
+            router: router,
+            server: server
+        }
+    }
+}
+
+module.exports.closeServer = (server) => {
+    server.close()
 }
 
 if(require.main === module) {
-    module.exports.RunApp()
+    module.exports.run()
 }
