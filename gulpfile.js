@@ -8,7 +8,7 @@ gulp.task('server-tests', function () {
         .pipe(mocha({
             cwd: 'server/src',
             c: true,
-            R: 'nyan',
+            R: 'spec',
             env: {NODE_ENV: 'TEST'}
         }))
 })
