@@ -2,12 +2,11 @@
 const util = require('./util/test_util')
 
 describe('Server presence', () => {
-    before('running server', () => {
-        require('../src/app').RunApp(util.port)
-    })
+    before(util.run)
+    after(util.stop)
 
-    describe('#ping', () => {
-        it('message should be pong', (done) => {
+    describe('#ping:', () => {
+        it('server\'s message must be pong', (done) => {
             util.getRequest('ping', (response) => {
                 util.assert.equal(response.message, 'pong')
                 done()
@@ -15,10 +14,10 @@ describe('Server presence', () => {
         })
     })
 
-    describe('#404Error', () => {
+    describe('#404Error:', () => {
         const invalidPath = util.randomSequence(16)
 
-        it('message should be invalid url', (done) => {
+        it('server\'s message should be "invalid url"', (done) => {
             util.getRequest(invalidPath, (response) => {
                 util.assert.equal(response.message, 'invalid url')
                 done()
@@ -32,4 +31,5 @@ describe('Server presence', () => {
             })
         })
     })
+
 })

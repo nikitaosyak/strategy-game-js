@@ -1,8 +1,25 @@
+const testPort = 9090
+
+let app = null
+let appState = null
+module.exports.run = () => {
+    app = require('../../src/app')
+    appState = app.runApp(testPort)
+
+    module.exports.app = app
+    module.exports.appState = appState
+}
+
+module.exports.stop = () => {
+    app.closeServer(appState.server)
+    app = null
+    appState = null
+}
+
 
 const randToken = require('rand-token')
 const http = require('http')
 
-const testPort = 9090
 
 module.exports.port = testPort
 module.exports.assert = require('assert')
