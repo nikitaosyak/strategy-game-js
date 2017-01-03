@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports.createPlayer = (user) => {
-    console.log('Player: created for user %s', user.getToken())
+    Logger.info('Player: created for user ', user.getToken())
     let _turnHook = null
     let _turnFlushed = false
 
@@ -13,7 +13,7 @@ module.exports.createPlayer = (user) => {
         flushTurn: () => _turnFlushed = true,
         setTurnHook: (response) =>  {
             if (_turnHook !== null) {
-                console.log('Player:setTurnHook: turn hook already exists!')
+                Logger.warn('Player:setTurnHook: turn hook already exists!')
                 return false
             }
 

@@ -27,25 +27,25 @@ module.exports.createSession = (token, user1, user2) => {
     const _startTurn = () => {
         _countStarted = Date.now()
         _state = State.TURN_IN_PROGRESS
-        console.log('Session: new turn #%d', _turn)
+        Logger.log('Session: new turn #%d', _turn)
     }
 
     const _endTurn = () => {
         const turnCommandsStr = JSON.stringify({status: 'OK', commands: _turnCommands})
         _turnCommands = []
-        // console.log('Session: will send commands: %s', turnCommandsStr)
+        // Logger.info('Session: will send commands: %s', turnCommandsStr)
         _players.forEach((p, i) => {
             if (_state == State.SESSION_ENDED) return
 
             if (p.getUser().isStale()) {
-                console.log('Session:endTurn: user %d is stale!', i)
+                Logger.warn('Session:endTurn: user %d is stale!', i)
                 _endSession()
                 return
             }
 
             const hook = p.getTurnHook()
             if (hook === null) {
-                console.log(p.getUser().getToken() + ': Hook not set!')
+                Logger.warn(p.getUser().getToken() + ': Hook not set!')
                 _endSession()
                 return
             }
@@ -55,7 +55,7 @@ module.exports.createSession = (token, user1, user2) => {
 
         _state = State.BETWEEN_TURN_PAUSE
         _countStarted = Date.now()
-        console.log('Session: end of turn #%d', _turn)
+        Logger.log('Session: end of turn #%d', _turn)
 
         _turn += 1
     }
@@ -84,14 +84,14 @@ module.exports.createSession = (token, user1, user2) => {
             let success = false
             _users.forEach(user => {
                 if (user.getToken() == userToken) {
-                    console.log('Session:userReady: approving player %s', user.getToken())
+                    Logger.log('Session:userReady: approving player %s', user.getToken())
                     _players.push(player.createPlayer(user))
                     success = true
                 }
             })
 
             if (_players.length == _users.length) {
-                console.log('Session:userReady: all users are ready! match starting!')
+                Logger.log('Session:userReady: all users are ready! match starting!')
                 _startTurn()
             }
             return success
@@ -118,7 +118,7 @@ module.exports.createSession = (token, user1, user2) => {
             const commandList = JSON.parse(value)
             commandList.forEach(cmd => {
                 if (cmd.turn == _turn) {
-                    console.log('player %s commands: %s', cmd.user_token, cmd.command)
+                    Logger.log('player %s commands: %s', cmd.user_token, cmd.command)
                     _turnCommands.push(cmd)
                 } else {
                     success = false
@@ -140,7 +140,7 @@ module.exports.createSession = (token, user1, user2) => {
             if (_state == State.SESSION_ENDED) return
 
             const elapsed = (Date.now() - _countStarted) / 1000
-            // console.log('turn time: %i. turn state: %s', elapsed, _state)
+            // Logger.info('turn time: %i. turn state: %s', elapsed, _state)
 
             if (_state == State.TURN_IN_PROGRESS) {
                 if (elapsed >= settings.game.turnTime) { // turn ended due to timeout

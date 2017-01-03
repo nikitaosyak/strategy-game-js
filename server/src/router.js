@@ -65,13 +65,13 @@ module.exports.createRouter = (game) => {
                     res
                 )
             if (!success) {
-                console.log('Error: cannot set turn hook for %s on turn %d',
+                Logger.error('Router: cannot set turn hook for %s on turn %d',
                     query.user_token, query.turn_number)
                 request.send_fail_standard(res)
             }
         }
         catch(e) {
-            console.log('Exception: cannot set turn hook: %s', e)
+            Logger.error('RouterException: cannot set turn hook: %s', e)
             request.send_fail_standard(res)
         }
     })

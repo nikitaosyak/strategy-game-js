@@ -1,12 +1,31 @@
-const   gulp = require('gulp');
+const gulp = require('gulp');
 
-gulp.task('server-run', function() {
+gulp.task('server-tests', function () {
+    const mocha = require('gulp-spawn-mocha')
+    const path = require('path')
+    const fs = require('fs')
+    return gulp.src(['server/test/*.js'], {read:false})
+        .pipe(mocha({
+            cwd: 'server/src',
+            c: true,
+            R: 'nyan',
+            env: {NODE_ENV: 'TEST'}
+        }))
+})
+
+gulp.task('nodemon-run', ['server-tests'], function() {
     const nodemon = require('gulp-nodemon')
     const path = require('path')
-    nodemon({
-        script: path.join(__dirname, 'server', 'src', 'app.js'),
-        watch: path.join(__dirname, 'server', 'src'),
-        env: {NODE_ENV: 'DEVELOPMENT'},
-        cwd: path.join(__dirname, 'server', 'src')
+    const nd = nodemon({
+        script: './app.js',
+        ext: 'js',
+        cwd: './server/src',
+        tasks: (files) => {
+            // console.log(files)
+            return ['server-tests']
+        },
+        env: {NODE_ENV: 'DEVELOPMENT'}
     })
 })
+
+gulp.task('server-run', ['server-tests', 'nodemon-run'])
