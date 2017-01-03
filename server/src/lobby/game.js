@@ -51,8 +51,8 @@ module.exports.createGame = () => {
                 //
                 // generate new Session object and notify users about it
                 const sessionToken = mod_token.generate(8)
-                const session = session.createSession(sessionToken, user1Item.user, user2Item.user)
-                _sessions.set(sessionToken, session)
+                const s = session.createSession(sessionToken, user1Item.user, user2Item.user)
+                _sessions.set(sessionToken, s)
 
                 const responseObj = JSON.stringify({
                     status: 'OK',
