@@ -4,7 +4,8 @@ let app = null
 let appState = null
 module.exports.run = () => {
     app = require('../../src/app')
-    appState = app.runApp(testPort)
+    appState = app.runApp(testPort, 10)
+    appState.settings.game.userStaleTime = 20
 
     module.exports.app = app
     module.exports.appState = appState
@@ -21,7 +22,6 @@ const randToken = require('rand-token')
 const http = require('http')
 
 
-module.exports.port = testPort
 module.exports.assert = require('assert')
 module.exports.randomSequence = (length) => randToken.generate(length)
 

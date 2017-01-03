@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports.runApp = (testingPort) => {
+module.exports.runApp = (testingPort, testingFrequency) => {
     global.Logger = require('js-logger')
     Logger.useDefaults()
 
@@ -29,7 +29,7 @@ module.exports.runApp = (testingPort) => {
     server.listen(ENV == 'TEST' ? testingPort : settings.system.port, () => {
         Logger.info('server successfully run on ', settings.system.port)
     })
-    setInterval(game.update, settings.game.gameUpdateFrequency)
+    setInterval(game.update, ENV == 'TEST' ? testingFrequency : settings.game.gameUpdateFrequency)
 
     if (ENV == 'TEST') {
         return {
