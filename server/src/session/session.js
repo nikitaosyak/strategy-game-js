@@ -143,7 +143,7 @@ module.exports.createSession = (token, user1, user2) => {
             // Logger.info('turn time: %i. turn state: %s', elapsed, _state)
 
             if (_state == State.TURN_IN_PROGRESS) {
-                if (elapsed >= settings.game.turnTime) { // turn ended due to timeout
+                if (elapsed >= settings.lobby.turnTime) { // turn ended due to timeout
                     _endTurn()
                 } else {                     // turn ended due to players flush
                     let flushes = 0
@@ -158,7 +158,7 @@ module.exports.createSession = (token, user1, user2) => {
                 }
             }
 
-            if (_state == State.BETWEEN_TURN_PAUSE && elapsed >= settings.game.turnPauseTime) {
+            if (_state == State.BETWEEN_TURN_PAUSE && elapsed >= settings.lobby.turnPauseTime) {
                 _startTurn()
             }
         }

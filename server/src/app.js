@@ -46,5 +46,5 @@ module.exports.closeServer = (server) => {
 }
 
 if(require.main === module) {
-    module.exports.run()
+    module.exports.runApp()
 }

@@ -2,7 +2,7 @@
     "system": {
         "port": 8181
     },
-    "game": {
+    "lobby": {
         "gameUpdateFrequency": 1000,
         "turnTime": 10,
         "turnPauseTime": 1,

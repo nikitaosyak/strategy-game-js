@@ -20,7 +20,7 @@ module.exports.createUser = (token) => {
             }
             return success
         },
-        isStale: () => (Date.now() - lastUpdateTime) > settings.game.userStaleTime,
+        isStale: () => (Date.now() - lastUpdateTime) > settings.lobby.userStaleTime,
     }
     return self
 }

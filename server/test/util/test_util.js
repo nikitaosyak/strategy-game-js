@@ -5,7 +5,7 @@ let appState = null
 module.exports.run = () => {
     app = require('../../src/app')
     appState = app.runApp(testPort, 10)
-    appState.settings.game.userStaleTime = 20
+    appState.settings.lobby.userStaleTime = 20
 
     module.exports.app = app
     module.exports.appState = appState
