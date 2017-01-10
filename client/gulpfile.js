@@ -14,16 +14,32 @@ let htmlDeps = "";
 gulp.task('collect-html-deps', function() {
     'use strict'
 
-    // const isWin = /^win/.test(process.platform);
+    const isWin = /^win/.test(process.platform);
     // const d = isWin ? '\\' : '\/';
     // const regex = new RegExp('^.*src' + d + '.*\.js', 'i');
     const through = require('through2')
+    const sort = require('gulp-sort')
 
     htmlDeps = "";
     return gulp.src(['src/**/*.js'])
+        .pipe(sort({
+            comparator: (f1, f2) => {
+                let result = 0
+                const contents1 = f1._contents.toString('utf8')
+                const f1Import = contents1.match(/^import.*/gm) !== null
+                const contents2 = f2._contents.toString('utf8')
+                const f2Import = contents2.match(/^import.*/gm) !== null
+                // console.log(f1Import, f2Import)
+
+                if (f1Import) result = 1
+                if (f2Import) result = -1
+                if (f1Import && f2Import) result = 0
+                return result
+            }
+        }))
         .pipe(through.obj(function(ch, enc, cb) {
-            // if (regex.test(ch.path)) {
-            const partialPath = ch.path.replace(/^.*src./i, '');
+            let partialPath = ch.path.replace(/^.*src./i, '');
+            partialPath = isWin ? partialPath.split('\\').join('/') : partialPath
             htmlDeps += '\n    <script type="text/javascript" src="' + partialPath + '"></script>';
             // }
             cb(null, ch)
@@ -37,9 +53,14 @@ gulp.task('clean', function() {
 
 gulp.task('deploy-raw', ['clean', 'collect-html-deps'], function() {
     const replace = require('gulp-replace')
+    const babel = require('gulp-babel')
 
-    gulp.src(['src/**/*.js', '!src/lib/**/*.js'])
-        .pipe(gulp.dest('build/'));
+    gulp.src(['src/js/**/*.js'])
+        .pipe(replace(/^import.*/gm, '\n'))
+        .pipe(babel({presets: ['es2015']}))
+        .pipe(replace(/.*exports.*__esModule.*\n(.*\n)(.*\n)/im, '\n'))
+        .pipe(replace(/exports..* =/im, ''))
+        .pipe(gulp.dest('build/js/'));
 
     gulp.src('src/lib/**/*.js').pipe(gulp.dest('build/lib/'))
 
