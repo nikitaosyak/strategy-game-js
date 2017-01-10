@@ -1,11 +1,12 @@
 
 export const ThreeJsRendererConstructor = () => {
-    const w = window.innerWidth, h = window.innerHeight
+    let _canvasW = window.innerWidth, _canvasH = window.innerHeight
 
     const _scene = new THREE.Scene()
-    const _camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 1000)
+    const _camera = new THREE.PerspectiveCamera(75, _canvasW/_canvasH, 0.1, 1000)
     const _renderer = new THREE.WebGLRenderer()
-    _renderer.setSize(w, h)
+    _renderer.setSize(_canvasW, _canvasH)
+    _renderer.domElement.style.display = 'block'
     document.body.appendChild(_renderer.domElement)
 
     const _renderBehaviours = []
@@ -16,6 +17,16 @@ export const ThreeJsRendererConstructor = () => {
 
         _renderer.render(_scene, _camera)
     }
+
+    const _onWindowResize = () => {
+        _canvasW = window.innerWidth
+        _canvasH = window.innerHeight
+
+        _renderer.setSize(_canvasW, _canvasH)
+        _camera.aspect = _canvasW / _canvasH
+        _camera.updateProjectionMatrix()
+    }
+    window.addEventListener('resize', _onWindowResize, false)
 
     return {
         renderBehaviour: {
