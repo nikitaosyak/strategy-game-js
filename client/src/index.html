@@ -12,30 +12,19 @@
 <body>
 
 <script type="text/javascript">
-	var w = window.innerWidth, h = window.innerHeight
-	var scene = new THREE.Scene()
-	var camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 1000)
+    (function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';document.head.appendChild(script);})()
 
-	var renderer  = new THREE.WebGLRenderer();
-	renderer.setSize(w, h)
-	document.body.appendChild(renderer.domElement)
+    var f = FacadeConstructor()
+    f.getRender().init()
+    f.getRender().getCamera().position.z = 4
 
-	var geo = new THREE.BoxGeometry(1, 1, 1)
-	var mat = new THREE.MeshBasicMaterial({color: 0xcccc00})
-	var cube = new THREE.Mesh(geo, mat)
-	scene.add(cube)
+    f.getRender().addBox(2, 2, 2, 0xCC0000, 'box1')
 
-	camera.position.z = 4
-
-	var render = function() {
-		requestAnimationFrame(render)
-		cube.rotation.x += 0.05
-		cube.rotation.y += 0.05
-
-		renderer.render(scene, camera)
-	}
-
-	render()
+    var obj = f.getRender().getObjectByName('box1')
+    f.getRender().renderBehaviour.add(() => {
+        obj.rotation.x += 0.02
+        obj.rotation.y += 0.02
+    })
 </script>
 
 
