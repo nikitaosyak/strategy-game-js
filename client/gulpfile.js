@@ -68,12 +68,15 @@ gulp.task('deploy-raw', ['clean', 'collect-html-deps'], function() {
         .pipe(replace(/.*<!-- GENERATED DEPS HERE -->.*/m, htmlDeps))
         .pipe(gulp.dest('build/'));
 
+    gulp.src('assets/**/*')
+        .pipe(gulp.dest('build/assets'))
+
     gulp.src(['src/**/*']).pipe(connect.reload());
 });
 
 gulp.task('watch', function() {
     'use strict'
-    gulp.watch(['src/**/*'], ['deploy-raw']);
+    gulp.watch(['src/**/*', 'assets/**/*'], ['deploy-raw']);
 });
 
 gulp.task('default', ['connect', 'deploy-raw', 'watch'])
