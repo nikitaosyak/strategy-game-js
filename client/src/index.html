@@ -15,13 +15,28 @@
         f.getRender().init()
         f.getRender().getCamera().position.z = 4
 
-        f.getRender().addBox(2, 2, 2, 0xCC0000, 'box1')
-
-        var obj = f.getRender().getObjectByName('box1')
-        f.getRender().renderBehaviour.add(() => {
-            obj.rotation.x += 0.02
-            obj.rotation.y += 0.02
+        f.loadResource('assets/models/hex_test_tex.png').then((texture) => {
+            f.loadResource('assets/models/hex_test.obj').then((obj) => {
+                obj.traverse(child => {
+                    if (child instanceof THREE.Mesh) {
+                        child.material = new THREE.MeshPhongMaterial(
+                            {
+                                color: 0xffffff,
+                                side: THREE.DoubleSide,
+                                map: texture
+                            }
+                        )
+                    }
+                })
+                f.getRender().addObject(obj)
+                f.getRender().renderBehaviour.add(() => {
+//                    obj.rotation.x += 0.02
+                    obj.rotation.y += 0.01
+                })
+            })
         })
+
+
     }
 </script>
 

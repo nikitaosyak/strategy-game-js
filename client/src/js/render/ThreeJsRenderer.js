@@ -9,6 +9,8 @@ export const ThreeJsRendererConstructor = () => {
     _renderer.domElement.style.display = 'block'
     document.body.appendChild(_renderer.domElement)
 
+    _scene.add(new THREE.AmbientLight(0x404040, 1.5))
+
     const _renderBehaviours = []
     const _renderUpdate = () => {
         requestAnimationFrame(_renderUpdate)
@@ -28,7 +30,7 @@ export const ThreeJsRendererConstructor = () => {
     }
     window.addEventListener('resize', _onWindowResize, false)
 
-    return {
+    const self = {
         renderBehaviour: {
             add: (rb) => _renderBehaviours.push(rb),
             remove: (rb) => _renderBehaviours.splice(_renderBehaviours.indexOf(rb), 1),
@@ -37,13 +39,15 @@ export const ThreeJsRendererConstructor = () => {
         getCamera: () => _camera,
         getObjectByName: (name) => _scene.getObjectByName(name),
         init: () => _renderUpdate(),
+        addObject: (value) => _scene.add(value),
         addBox: (x, y, z, color, name) => {
             const m = new THREE.Mesh(
                 new THREE.BoxGeometry(x, y, z),
                 new THREE.MeshBasicMaterial({color: color})
             )
             m.name = name
-            _scene.add(m)
+            self.addObject(m)
         }
     }
+    return self
 }
