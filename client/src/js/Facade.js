@@ -1,14 +1,13 @@
 import {ThreeJsRendererConstructor} from "./render/ThreeJsRenderer";
-
-const RendererType = {
-    THREE_JS: ThreeJsRendererConstructor
-}
+import {ResourceLoader} from "./util/ResourceLoader";
 
 const FacadeConstructor = () => {
     const _model = ModelConstructor()
-    const _render = RendererType.THREE_JS()
+    const _render = ThreeJsRendererConstructor()
+    const _loader = ResourceLoader()
     return {
         getModel: () => _model,
-        getRender: () => _render
+        getRender: () => _render,
+        loadResource: (path) => _loader.loadResource(path),
     }
 }
