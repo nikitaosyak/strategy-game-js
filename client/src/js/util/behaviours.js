@@ -2,7 +2,7 @@
 const stateGetter = (state) => ({getState: () => state})
 
 const nameGetter = (state) => ({getName: () => state.name})
-const indexGetter = (state) => ({getName: () => state.index})
+const indexGetter = (state) => ({getIndex: () => state.index})
 const visualGetter = (state) => ({getVisual: () => state.visual})
 
 const visualLoader = (state) => ({loadVisual: (path) => {
