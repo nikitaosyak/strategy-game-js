@@ -55,24 +55,49 @@ gulp.task('deploy-raw', ['clean', 'collect-html-deps'], function() {
     const replace = require('gulp-replace')
     const babel = require('gulp-babel')
 
-    gulp.src(['src/js/**/*.js'])
-        .pipe(replace(/^import.*/gm, '\n'))
-        .pipe(babel({presets: ['es2015']}))
-        .pipe(replace(/.*exports.*__esModule.*\n(.*\n)(.*\n)/im, '\n'))
-        .pipe(replace(/exports..* =/im, ''))
-        .pipe(gulp.dest('build/js/'));
+    // gulp.src(['src/js/**/*.js'])
+    //     // .pipe(replace(/^import.*/gm, '\n'))
+    //     .pipe(babel({presets: ['es2015']}))
+    //     // .pipe(replace(/.*exports.*__esModule.*\n(.*\n)(.*\n)/im, '\n'))
+    //     // .pipe(replace(/exports..* =/im, ''))
+    //     .pipe(gulp.dest('build/js'));
 
     gulp.src('src/lib/**/*.js').pipe(gulp.dest('build/lib/'))
 
     gulp.src(['src/index.html'])
-        .pipe(replace(/.*<!-- GENERATED DEPS HERE -->.*/m, htmlDeps))
+        // .pipe(replace(/.*<!-- GENERATED DEPS HERE -->.*/m, htmlDeps))
         .pipe(gulp.dest('build/'));
 
     gulp.src('assets/**/*')
         .pipe(gulp.dest('build/assets'))
 
-    gulp.src(['src/**/*']).pipe(connect.reload());
+    // gulp.src(['src/**/*']).pipe(connect.reload());
 });
+
+gulp.task('test-webpack', () => {
+    const stream = require('webpack-stream')
+    const webpack2 = require('webpack')
+
+    const config = {
+        module: {
+            loaders: [{
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['es2015']
+                }
+            }]
+        },
+        output: {
+            filename: 'bundle.js'
+        }
+    }
+
+    gulp.src('src/js/**/*.js')
+        .pipe(stream(config, webpack2))
+        .pipe(gulp.dest('build/'))
+})
 
 gulp.task('watch', function() {
     'use strict'

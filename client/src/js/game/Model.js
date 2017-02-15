@@ -1,5 +1,5 @@
 
-const ModelConstructor = () => {
+export const ModelConstructor = () => {
     return {
         map: {
             radius: 0,

@@ -1,11 +1,11 @@
 
-const stateGetter = (state) => ({getState: () => state})
+export const stateGetter = (state) => ({getState: () => state})
 
-const nameGetter = (state) => ({getName: () => state.name})
-const indexGetter = (state) => ({getIndex: () => state.index})
-const visualGetter = (state) => ({getVisual: () => state.visual})
+export const nameGetter = (state) => ({getName: () => state.name})
+export const indexGetter = (state) => ({getIndex: () => state.index})
+export const visualGetter = (state) => ({getVisual: () => state.visual})
 
-const visualLoader = (state) => ({loadVisual: (path) => {
+export const visualLoader = (state) => ({loadVisual: (path) => {
         return new Promise((resolve, reject) => {
             const meshPath = path + '.obj'
             const texturePath = path + '_tex.png'

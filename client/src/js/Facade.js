@@ -1,7 +1,8 @@
 import {ThreeJsRendererConstructor} from "./render/ThreeJsRenderer";
 import {ResourceLoader} from "./util/ResourceLoader";
+import {ModelConstructor} from './game/Model'
 
-const FacadeConstructor = () => {
+export const FacadeConstructor = () => {
     const _model = ModelConstructor()
     const _render = ThreeJsRendererConstructor()
     const _loader = ResourceLoader()

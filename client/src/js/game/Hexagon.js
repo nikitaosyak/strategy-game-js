@@ -1,5 +1,6 @@
+import {nameGetter, indexGetter, visualGetter, visualLoader} from './../util/behaviours'
 
-const HexagonConstructor = (name, index, visualPath) => {
+export const HexagonConstructor = (name, index, visualPath) => {
     let _state = {
         name: name,
         index: index,
