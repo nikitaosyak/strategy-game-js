@@ -16,6 +16,7 @@
     "gulp-connect": "^5.0.0",
     "gulp-replace": "^0.5.4",
     "gulp-sort": "^2.0.0",
-    "through2": "^2.0.1"
+    "through2": "^2.0.1",
+    "webpack": "^2.2.1"
   }
 }
