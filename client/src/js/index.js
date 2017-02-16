@@ -7,6 +7,11 @@ const f = window.facade = FacadeConstructor()
 f.getRender().init()
 f.getRender().getCamera().position.z = 4
 
+//
+// load map layout here
+
+
+
 const h = HexagonConstructor('someHex', 0)
 h.loadVisual('assets/models/hex_test').then(() => {
     f.getRender().addObject(h.getVisual())
