@@ -10,6 +10,7 @@ export const visualLoader = (state) => ({loadVisual: (path) => {
             const meshPath = path + '.obj'
             const texturePath = path + '_tex.png'
 
+            const f = window.facade;
             f.loadResource(texturePath).then((texture) => {
                 f.loadResource(meshPath).then((obj) => {
                     obj.traverse(child => {
