@@ -70,7 +70,7 @@
     <inspection_tool class="ContinueOrBreakFromFinallyBlockJS" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
-    <inspection_tool class="ContinueStatementJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="ContinueStatementJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="ContinueStatementWithLabelJS" enabled="true" level="WARNING" enabled_by_default="true">
