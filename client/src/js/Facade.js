@@ -1,18 +1,24 @@
 import {ThreeJsRendererConstructor} from "./render/ThreeJsRenderer";
-import {ResourceLoader} from "./util/ResourceLoader";
+import {ResourceLoaderConstructor} from "./util/ResourceLoader";
 import {ModelConstructor} from './game/Model'
-import {Connection} from './Connection'
+import {ConnectionConstructor} from './Connection'
 
+/**
+ * @returns {{connection, model, renderer, resourceLoader}}
+ * @constructor
+ */
 export const FacadeConstructor = () => {
-    const _model = ModelConstructor()
-    const _render = ThreeJsRendererConstructor()
-    const _loader = ResourceLoader()
-    const _connection = new Connection('localhost', 8181);
+    const _state = {
+        resourceLoader: ResourceLoaderConstructor(),
+        connection: ConnectionConstructor('localhost', 8181),
+        model: ModelConstructor(),
+        renderer: ThreeJsRendererConstructor()
+    }
 
     return {
-        getConnection: () => _connection,
-        getModel: () => _model,
-        getRender: () => _render,
-        loadResource: (path) => _loader.loadResource(path),
+        get connection() { return _state.connection},
+        get model() { return _state.model },
+        get renderer() { return _state.renderer },
+        get resourceLoader() { return _state.resourceLoader }
     }
 }
