@@ -18,7 +18,12 @@ f.connection.connect().then(() => {
         console.log('main: session linked')
         SessionConstructor(f, sessionData)
     }, () => { throw 'Cannot enqueue' })
-}, () => console.log('main: running in offline mode'))
+}, () => {
+    // game starts in offline mode
+    SessionConstructor(f, 
+        {session_token:'DEADBEEF', players:['DEADBEEF']}
+        )
+})
 
 // const h = HexagonConstructor('someHex', 0, 'assets/models/hex_test')
 // h.loadVisual().then(() => {
