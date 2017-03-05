@@ -17,3 +17,23 @@ export const getUrlVars = (address, path, ...args) => {
 
     return result
 }
+
+export const getRequest = (url) => {
+    return new Promise((resolve, reject) => {
+        var req = new XMLHttpRequest()
+        req.addEventListener('error', reject)
+        req.addEventListener('abort', reject)
+        req.open('GET', url)
+        req.onreadystatechange = () => {
+            if (req.readyState === 4 && req.status === 200) {
+                const jsonData = JSON.parse(req.responseText)
+                if (jsonData.status === 'OK') {
+                    resolve(jsonData)
+                } else {
+                    reject()
+                }
+            }
+        }
+        req.send()
+    })
+}
