@@ -24,19 +24,21 @@ export const ConnectionConstructor = (host, port) => {
             return new Promise((resolve, reject) => {
                 // reject("connect: not implemented");
                 const path =  getUrlVars(_state.address, 'hello')
-                const r = getRequest(path).then((data) => {
+                getRequest(path).then((data) => {
                     _state.token = data.token
                     _state.online = true
                     resolve()
-                }).catch(reject)
+                }, reject)
             })
         },
         /** @returns {Promise} */
         enqueue: () => {
             if (!_state.online) throw 'Connection.enqueue: offline'
-            getUrlVars(_state.address, 'queue', 'user_token', _state.token)
             return new Promise((resolve, reject) => {
-                reject('enqueue: not implemented')
+                const path = getUrlVars(
+                    _state.address, 'queue', 
+                    'user_token', _state.token)
+                getRequest(path).then(resolve, reject)
             })
         },
         /**

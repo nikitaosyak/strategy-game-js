@@ -1,5 +1,6 @@
 import {FacadeConstructor} from './Facade'
 import {HexagonConstructor} from './game/Hexagon'
+import {GameConstructor} from './game/Game'
 
 //
 // initialize game
@@ -13,14 +14,14 @@ f.renderer.getCamera().position.z = 4
 //
 // initialize connection with server
 f.connection.connect().then(() => {
-    // connection made
+    // connection made, waiting session begin
     console.log('main: uplink estableashed. Token: %s', f.connection.token)
-    f.connection.enqueue().then(() => {
-
-    }).catch(() => { throw 'Cannot enqueue' })
-}).catch(() => {
-    console.log('main: running in offline mode')
-})
+    f.connection.enqueue().then((sessionData) => {
+        // game starting here
+        console.log('main: session linked')
+        GameConstructor(f, sessionData)
+    }, () => { throw 'Cannot enqueue' })
+}, () => console.log('main: running in offline mode'))
 
 // const h = HexagonConstructor('someHex', 0, 'assets/models/hex_test')
 // h.loadVisual().then(() => {

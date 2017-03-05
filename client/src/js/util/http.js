@@ -30,6 +30,7 @@ export const getRequest = (url) => {
                 if (jsonData.status === 'OK') {
                     resolve(jsonData)
                 } else {
+                    throw 'http.getRequest failed: ' + req.responseText
                     reject()
                 }
             }
