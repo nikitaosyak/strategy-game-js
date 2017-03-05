@@ -1,4 +1,3 @@
-
 export const ResourceLoaderConstructor = () => {
     const _loadingManager = new THREE.LoadingManager()
     const _onProgress = (xhr) => {}
@@ -6,9 +5,24 @@ export const ResourceLoaderConstructor = () => {
     return {
         load: (path) => {
             console.log('Resource loader: will load at path: ' + path)
-            const ext = path.substring(path.length - 3)
+            const pathArr = path.split('.')
+            const ext = pathArr[pathArr.length - 1]
             let promise;
             switch (ext) {
+                case 'json':
+                    promise = new Promise((resolve, reject) => {
+                        var req = new XMLHttpRequest()
+                        req.addEventListener('error', reject)
+                        req.addEventListener('abort', reject)
+                        req.open('GET', path)
+                        req.onreadystatechange = () => {
+                            if (req.readyState === 4 && req.status === 200) {
+                                resolve(JSON.parse(req.responseText))
+                            }
+                        }
+                        req.send()
+                    })
+                break
                 case 'obj':
                     promise = new Promise((resolve, reject) => {
                         const loader = new THREE.OBJLoader(_loadingManager)
