@@ -1,12 +1,10 @@
 
-export const GameModelConstructor = (params, mapLayout) => {
+export const GameModelConstructor = (params) => {
 	const _state = {
-		params: params,
-		mapLayout: mapLayout
+		params: params
 	}
 
     return {
-    	get params() { return _state.params },
-    	get mapLayout() { return _state.mapLayout }
+    	get params() { return _state.params }
     }
 }
