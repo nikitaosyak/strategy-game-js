@@ -1,0 +1,5 @@
+
+export const GameModelConstructor = () => {
+    return {
+    }
+}

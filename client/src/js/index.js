@@ -1,15 +1,12 @@
 import {FacadeConstructor} from './Facade'
 import {HexagonConstructor} from './game/Hexagon'
-import {GameConstructor} from './game/Game'
+import {SessionConstructor} from './game/Session'
 
 //
 // initialize game
 const f = window.facade = FacadeConstructor()
 f.renderer.init()
 f.renderer.getCamera().position.z = 4
-
-//
-// load map layout here
 
 //
 // initialize connection with server
@@ -19,7 +16,7 @@ f.connection.connect().then(() => {
     f.connection.enqueue().then((sessionData) => {
         // game starting here
         console.log('main: session linked')
-        GameConstructor(f, sessionData)
+        SessionConstructor(f, sessionData)
     }, () => { throw 'Cannot enqueue' })
 }, () => console.log('main: running in offline mode'))
 
