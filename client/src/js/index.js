@@ -21,7 +21,7 @@ f.connection.connect().then(() => {
 }, () => {
     // game starts in offline mode
     SessionConstructor(f, 
-        {session_token:'DEADBEEF', players:['DEADBEEF']}
+        {session_token:'DEADBEEF', users:['DEADBEEF']}
         )
 })
 

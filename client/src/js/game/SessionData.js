@@ -25,7 +25,7 @@ export const SessionDataConstructor = () => {
             _state.token = sessionToken
             _state.players = players
 
-            for (let i = 0; i < players; i++) {
+            for (let i = 0; i < players.length; i++) {
                 if (players[i] !== myUserToken) continue
                 _state.myIndex = i
             }
@@ -45,6 +45,10 @@ export const SessionDataConstructor = () => {
             _state.myIndex = -1
             _state.players = null
             _state.turn = -1
+        },
+
+        traceState: () => {
+            console.log(_state)
         }
     }
 }

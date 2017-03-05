@@ -89,6 +89,10 @@ export const ConnectionConstructor = (host, port) => {
             return new Promise((resolve, reject) => {
                 reject('command: not implemented')
             })
+        },
+
+        traceState: () => {
+            console.log(_state)
         }
     }
 }

@@ -7,8 +7,10 @@ export const SessionConstructor = (f, sessionData) => {
     data.initialize(
         f.connection.token, 
         sessionData.session_token, 
-        sessionData.players
+        sessionData.users
     )
+    // f.connection.traceState()
+    // data.traceState()
 
     let model = null
     f.resourceLoader.load('assets/game_params.json').then((data) => {
