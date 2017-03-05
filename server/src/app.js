@@ -25,7 +25,10 @@ module.exports.runApp = (testingPort, testingFrequency) => {
     const lobby = require('./lobby/lobby').createLobby();
     const router = require('./router').createRouter(lobby)
 
-    const server = http.createServer((req, res) => router.route(req, res));
+    const server = http.createServer((req, res) => {
+        res.setHeader("Access-Control-Allow-Origin", "*")
+        router.route(req, res)
+    });
     server.listen(ENV == 'TEST' ? testingPort : settings.system.port, () => {
         Logger.info('server successfully run on ', settings.system.port)
     })
