@@ -1,7 +1,7 @@
 {
     "scales": {
         "base": 0.3,
-        "worker": 0.15
+        "fallback": 0.3
     },
     "commands_ui_type": {
         "build_ork" : "instant",
@@ -12,20 +12,10 @@
         "move": "pick_location"
     },
     "commands": {
-        "worker": ["move"],
         "base": ["build_well", "rotate_ground"],
-        "well": ["build_ork", "build_human", "build_elf"]
-    },
-    "vertical": {
-        "gap": 0,
-        "radius": 240,
-        "facets": 11,
-        "rows": 6
-    },
-    "horizontal": {
-        "gap": 0,
-        "radius": 190,
-        "facets": 17,
-        "rows": 4
+        "well": ["build_ork", "build_human", "build_elf"],
+        "ork": ["move"],
+        "human": ["move"],
+        "elf": ["move"]
     }
 }
