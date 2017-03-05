@@ -1,4 +1,5 @@
 import {getUrlVars} from './util/http'
+import {getRequest} from './util/http'
 
 /**
  * @param {string} host
@@ -11,7 +12,7 @@ export const ConnectionConstructor = (host, port) => {
         port: port,
         address: host + ':' + port.toString(),
         online: false,
-        token: ""
+        token: "DEADBEEF"
     }
 
     return {
@@ -20,9 +21,14 @@ export const ConnectionConstructor = (host, port) => {
         isOnline: () => _state.online,
         /** @returns {Promise} */
         connect: () => {
-            getUrlVars(_state.address, 'hello')
             return new Promise((resolve, reject) => {
-                reject("connect: not implemented");
+                // reject("connect: not implemented");
+                const path =  getUrlVars(_state.address, 'hello')
+                const r = getRequest(path).then((data) => {
+                    _state.token = data.token
+                    _state.online = true
+                    resolve()
+                }).catch(reject)
             })
         },
         /** @returns {Promise} */
