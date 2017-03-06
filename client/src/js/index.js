@@ -5,7 +5,6 @@ import {SessionConstructor} from './game/Session'
 // initialize game
 const f = window.facade = FacadeConstructor()
 f.renderer.init()
-f.renderer.getCamera().position.z = 4
 
 f.connection.connect().then(
     () => {
