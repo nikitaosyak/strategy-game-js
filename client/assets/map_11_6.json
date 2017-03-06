@@ -1,9 +1,8 @@
 {
 	"meta": {
-        "radius": 240,
         "tileGap": 0,
-        "tileWidth": 11,
-        "tileHeight": 6
+        "width": 11,
+        "height": 6
     },
     "layout": [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
