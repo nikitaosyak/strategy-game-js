@@ -39,9 +39,7 @@ gulp.task('pack', ['clean'], () => {
         .pipe(gulp.dest('build/'))
 })
 
-gulp.task('deploy', ['clean', 'pack'], () => {
-    const babel = require('gulp-babel')
-
+gulp.task('deploy-static', ['clean'], () => {
     gulp.src('src/lib/**/*.js').pipe(gulp.dest('build/lib/'))
 
     gulp.src(['src/index.html'])
@@ -49,11 +47,11 @@ gulp.task('deploy', ['clean', 'pack'], () => {
 
     gulp.src('assets/**/*')
         .pipe(gulp.dest('build/assets'))
+})
 
+gulp.task('deploy', ['clean', 'pack', 'deploy-static'], () => {
     gulp.src(['src/**/*']).pipe(connect.reload());
 });
-
-
 
 gulp.task('watch', () => {
     gulp.watch(['src/**/*', 'assets/**/*'], ['deploy']);
