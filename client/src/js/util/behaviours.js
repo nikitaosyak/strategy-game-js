@@ -19,9 +19,9 @@ export const visualLoader = (state) => ({loadVisual: () => {
                         }
                     })
                     state.visual = obj
-                    console.log('someones visual loaded: ', state)
+                    // console.log('someones visual loaded: ', state)
                     resolve()
-                }).catch(reject)
-            }).catch(reject)
+                }, reject)
+            }, reject)
         })
 }})

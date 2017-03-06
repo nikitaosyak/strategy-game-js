@@ -4,7 +4,7 @@ export const ResourceLoaderConstructor = () => {
 
     return {
         load: (path) => {
-            console.log('Resource loader: will load at path: ' + path)
+            // console.log('Resource loader: will load at path: ' + path)
             const pathArr = path.split('.')
             const ext = pathArr[pathArr.length - 1]
             let promise;
