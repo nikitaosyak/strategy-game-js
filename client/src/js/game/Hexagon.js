@@ -15,7 +15,7 @@ export const HexagonConstructor = (name, index, visualPath) => {
         visual: null
     }
 
-    console.log('hexagon created: ', _state)
+    // console.log('hexagon created: ', _state)
 
     const self = {
         get name() { return _state.name },
