@@ -3,9 +3,11 @@ export const ThreeJsRendererConstructor = () => {
     let _canvasW = window.innerWidth, _canvasH = window.innerHeight
 
     const _scene = new THREE.Scene()
-    const _camera = new THREE.PerspectiveCamera(75, _canvasW/_canvasH, 0.1, 1000)
+    const _camera = new THREE.PerspectiveCamera(16, _canvasW/_canvasH, 1, 1000)
+    // const _camera = new THREE.OrthographicCamera( _canvasW / - 2, _canvasW / 2, _canvasH / 2, _canvasH / - 2, 1, 1000 );
     const _renderer = new THREE.WebGLRenderer()
     _renderer.setSize(_canvasW, _canvasH)
+    _renderer.setClearColor(0x090040)
     _renderer.domElement.style.display = 'block'
     document.body.appendChild(_renderer.domElement)
 
