@@ -23,14 +23,6 @@ export const HexagonGridConstructor = (template) => {
     f.renderer.getCamera().lookAt({x:0, y: 0, z:0})
     const angleStep = 360 / template.meta.width
 
-    const h = HexagonConstructor('someHex', 0, 'assets/models/hex_test')
-    h.loadVisual().then(() => {
-        // f.renderer.addObject(h.visual)
-        f.renderer.renderBehaviour.add(() => {
-            h.visual.rotation.y += 0.01
-        })
-    })
-
     let centerY = calculatedHeight / 2
     for (let j = 0; j < template.meta.height; j++) {
         for (let i = 0; i < template.meta.width; i++) {
@@ -51,7 +43,4 @@ export const HexagonGridConstructor = (template) => {
             })
         }
     }
-    f.renderer.renderBehaviour.add(() => {
-        _state.gridRoot.rotation.y += 0.002
-    })
 }
