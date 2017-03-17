@@ -1,13 +1,29 @@
 import {GameModelConstructor} from './GameModel'
 import {SessionDataConstructor} from './SessionData'
 import {HexagonGridConstructor} from './HexagonGrid'
+import {SessionInputConstructor} from "./SessionInput";
 
 export const SessionConstructor = (sessionData) => {
     let f = window.facade
     const _state = {
         data: SessionDataConstructor(),
+        input: SessionInputConstructor(f.renderer.domObject),
         model: null,
         grid: null
+    }
+
+
+    const _gameUpdater = () => {
+        requestAnimationFrame(_gameUpdater)
+
+        // check input
+        console.log(_state.input.calcState())
+        // _state.grid.rotateGrid(_state.input.get)
+
+        // check uplink
+
+        // update visual
+        f.renderer.update()
     }
     
     //
@@ -49,6 +65,7 @@ export const SessionConstructor = (sessionData) => {
                 myStartLocation = 50 // we dont give a fuck in offline
             }
             console.log('session: my location: ' + myStartLocation)
+            _gameUpdater()
         })      
     })
 }

@@ -13,15 +13,6 @@ export const ThreeJsRendererConstructor = () => {
 
     _scene.add(new THREE.AmbientLight(0x404040, 1.5))
 
-    const _renderBehaviours = []
-    const _renderUpdate = () => {
-        requestAnimationFrame(_renderUpdate)
-
-        _renderBehaviours.forEach((rb) => rb())
-
-        _renderer.render(_scene, _camera)
-    }
-
     const _onWindowResize = () => {
         _canvasW = window.innerWidth
         _canvasH = window.innerHeight
@@ -33,14 +24,12 @@ export const ThreeJsRendererConstructor = () => {
     window.addEventListener('resize', _onWindowResize, false)
 
     const self = {
-        renderBehaviour: {
-            add: (rb) => _renderBehaviours.push(rb),
-            remove: (rb) => _renderBehaviours.splice(_renderBehaviours.indexOf(rb), 1),
-            clearAll: () => _renderBehaviours.splice(0, _renderBehaviours.length)
-        },
-        getCamera: () => _camera,
+        get camera() { return _camera },
+        get domObject() { return _renderer.domElement },
+
+        update: () => _renderer.render(_scene, _camera),
+
         getObjectByName: (name) => _scene.getObjectByName(name),
-        init: () => _renderUpdate(),
         addObject: (value) => _scene.add(value),
         addBox: (x, y, z, color, name) => {
             const m = new THREE.Mesh(

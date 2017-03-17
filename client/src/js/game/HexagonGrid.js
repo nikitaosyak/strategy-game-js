@@ -18,9 +18,9 @@ export const HexagonGridConstructor = (template) => {
     const calculatedHeight = rowOffset * (template.meta.height-1)
 
 	const radius = facetWidth / (2 * Math.tan(Math.PI / 11))
-    f.renderer.getCamera().position.y = 0
-    f.renderer.getCamera().position.z = 20
-    f.renderer.getCamera().lookAt({x:0, y: 0, z:0})
+    f.renderer.camera.position.y = 0
+    f.renderer.camera.position.z = 20
+    f.renderer.camera.lookAt({x:0, y: 0, z:0})
     const angleStep = 360 / template.meta.width
 
     let centerY = calculatedHeight / 2
@@ -41,6 +41,12 @@ export const HexagonGridConstructor = (template) => {
                 hex.visual.rotation.y = Math.PI/2 - travelAngleRad
                 _state.gridRoot.add(hex.visual)
             })
+        }
+    }
+
+    return {
+	    rotateGrid: (angle) => {
+	        _state.gridRoot.visual.rotation.y += angle
         }
     }
 }

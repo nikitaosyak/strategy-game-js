@@ -4,7 +4,6 @@ import {SessionConstructor} from './game/Session'
 //
 // initialize game
 const f = window.facade = FacadeConstructor()
-f.renderer.init()
 
 f.connection.connect().then(
     () => {
