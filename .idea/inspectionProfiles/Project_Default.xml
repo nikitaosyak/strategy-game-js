@@ -192,7 +192,7 @@
     <inspection_tool class="FunctionWithMultipleLoopsJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
-    <inspection_tool class="FunctionWithMultipleReturnPointsJS" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="FunctionWithMultipleReturnPointsJS" enabled="true" level="WEAK WARNING" enabled_by_default="false">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="GjsLint" enabled="false" level="WARNING" enabled_by_default="false">
@@ -412,7 +412,7 @@
     <inspection_tool class="NegatedIfStatementJS" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
-    <inspection_tool class="NestedAssignmentJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="NestedAssignmentJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="NestedConditionalExpressionJS" enabled="true" level="WARNING" enabled_by_default="true">
