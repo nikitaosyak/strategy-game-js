@@ -1,49 +1,49 @@
+export const SessionInputTarget = {
+    CANVAS: 'canvas'
+}
 
 export const SessionInputConstructor = (canvas) => {
+
+
     const _state = {
         isDown: false,
         target: null,
-        anchor: {x: Number.NaN, y: Number.NaN},
+        downAnchor: {x: Number.NaN, y: Number.NaN},
         frameAnchor: {x: Number.NaN, y: Number.NaN},
-        delta: {x: Number.NaN, y: Number.NaN},
-        digest: {target: null, dx: Number.NaN, dy: Number.NaN}
+        // framePosition: {x: Number.NaN, y: Number.NaN},
+        delta: {x: 0, y: 0},
+        frameDelta: {x: 0, y: 0}
     }
 
     canvas.onmousedown = (e) => {
-        // console.log(e)
         _state.isDown = true
-        _state.target = 'canvas'
+        _state.target = SessionInputTarget.CANVAS
 
-        _state.anchor.x = e.screenX
-        _state.anchor.y = e.screenY
+        _state.downAnchor.x = _state.frameAnchor.x = e.screenX
+        _state.downAnchor.y = _state.frameAnchor.y = e.screenY
     }
 
     canvas.onmousemove = (e) => {
-        if (!_state.isDown) return
-
-        _state.delta.x = e.screenX - _state.anchor.x
-        _state.delta.y = _state.anchor.y - e.screenY
         _state.frameAnchor.x = e.screenX
         _state.frameAnchor.y = e.screenY
+        _state.delta.x = _state.frameAnchor.x - _state.downAnchor.x
+        _state.delta.y = _state.downAnchor.y - _state.frameAnchor.y
     }
 
     canvas.onmouseup = (e) => {
         _state.isDown = false
         _state.target = null
-        _state.delta.x = _state.delta.y
-            = _state.anchor.x = _state.anchor.y
-            = _state.frameAnchor.x = _state.frameAnchor.y = Number.NaN
+        // _state.downAnchor.x = _state.downAnchor.y = Number.NaN
     }
 
     return {
-        calcState: () => {
-            _state.digest.target = _state.target
-            _state.digest.dx = _state.delta.x
-            _state.digest.dy = _state.delta.y
-            _state.anchor.x = _state.frameAnchor.x
-            _state.anchor.y = _state.frameAnchor.y
-
-            return _state.digest
+        get target() { return _state.target },
+        get dx() { return _state.delta.x },
+        get dy() { return _state.delta.y },
+        update: () => {
+            _state.downAnchor.x = _state.frameAnchor.x
+            _state.downAnchor.y = _state.frameAnchor.y
+            // _state.frameAnchor.x = _state.frameAnchor.y = Number.NaN
         }
     }
 }
