@@ -17,12 +17,15 @@ export const SessionConstructor = (sessionData) => {
         requestAnimationFrame(_gameUpdater)
 
         // check input
-        _state.input.update()
         if (_state.input.target === SessionInputTarget.CANVAS && _state.input.wasMove) {
-            // console.log(_state.input.dx)
-            const tt = new THREE.Vector3(((_state.input.dx + window.innerWidth/2)/window.innerWidth) * 2 - 1, 0, 0.5)
-            _state.grid.rotate(Math.atan2(tt.x, 0.40))
+            const projVector = new THREE.Vector3(((_state.input.dx + window.innerWidth/2)/window.innerWidth) * 2 - 1, 0, 0.5)
+            _state.grid.rotate(Math.atan2(projVector.x, 0.40))
         }
+        if (_state.input.lastClick.click) {
+            console.log(_state.input.lastClick)
+            _state.input.deleteClick()
+        }
+        _state.input.update() // update will nullify dx
 
         // check uplink
 
