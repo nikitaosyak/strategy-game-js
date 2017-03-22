@@ -5,6 +5,8 @@
       <w>onmousedown</w>
       <w>onmousemove</w>
       <w>onmouseup</w>
+      <w>ontouchmove</w>
+      <w>ontouchstart</w>
       <w>preved</w>
     </words>
   </dictionary>
