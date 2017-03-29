@@ -2,6 +2,11 @@ export const SessionInputTarget = {
     CANVAS: 'canvas'
 }
 
+export const DeviceType = {
+    COMPUTER: 'computer',
+    MOBILE: 'mobile'
+}
+
 export const SessionInputConstructor = (canvas) => {
     const _state = {
         isDown: false,
@@ -10,37 +15,45 @@ export const SessionInputConstructor = (canvas) => {
         downMove: false,
         downAnchor: {x: Number.NaN, y: Number.NaN},
         frameAnchor: {x: Number.NaN, y: Number.NaN},
-        delta: {x: 0, y: 0},
-        frameDelta: {x: 0, y: 0}
+        delta: {x: 0, y: 0}
     }
 
-    const onTouchStart = (e, mobile) => {
+    const onTouchStart = (e, deviceType) => {
         e.preventDefault()
 
         _state.clickInfo.click = false
         _state.isDown = true
         _state.target = SessionInputTarget.CANVAS
 
-        if (mobile) {
-
-            _state.clickInfo.x = _state.downAnchor.x = _state.frameAnchor.x = e.touches.item(0).clientX
-            _state.clickInfo.y = _state.downAnchor.y = _state.frameAnchor.y = e.touches.item(0).clientY
-        } else {
-            _state.clickInfo.x = _state.downAnchor.x = _state.frameAnchor.x = e.clientX
-            _state.clickInfo.y = _state.downAnchor.y = _state.frameAnchor.y = e.clientY
+        switch (deviceType) {
+            case DeviceType.COMPUTER:
+                _state.clickInfo.x = _state.downAnchor.x = _state.frameAnchor.x = e.clientX
+                _state.clickInfo.y = _state.downAnchor.y = _state.frameAnchor.y = e.clientY
+                break
+            case DeviceType.MOBILE:
+                _state.clickInfo.x = _state.downAnchor.x = _state.frameAnchor.x = e.touches.item(0).clientX
+                _state.clickInfo.y = _state.downAnchor.y = _state.frameAnchor.y = e.touches.item(0).clientY
+                break
+            default:
+                throw "Unknown device type: " + deviceType
         }
     }
 
-    const onTouchMove = (e, mobile) => {
+    const onTouchMove = (e, deviceType) => {
         e.preventDefault()
 
         _state.downMove = _state.isDown
-        if (mobile) {
-            _state.frameAnchor.x = e.touches.item(0).clientX
-            _state.frameAnchor.y = e.touches.item(0).clientY
-        } else {
-            _state.frameAnchor.x = e.clientX
-            _state.frameAnchor.y = e.clientY
+        switch (deviceType) {
+            case DeviceType.COMPUTER:
+                _state.frameAnchor.x = e.clientX
+                _state.frameAnchor.y = e.clientY
+                break
+            case DeviceType.MOBILE:
+                _state.frameAnchor.x = e.touches.item(0).clientX
+                _state.frameAnchor.y = e.touches.item(0).clientY
+                break
+            default:
+                throw "Unknown device type: " + deviceType
         }
         _state.delta.x = _state.frameAnchor.x - _state.downAnchor.x
         _state.delta.y = _state.downAnchor.y - _state.frameAnchor.y
@@ -54,12 +67,12 @@ export const SessionInputConstructor = (canvas) => {
         _state.target = null
     }
 
-    canvas.ontouchstart = (e) => onTouchStart(e, true)
-    canvas.ontouchmove = (e) => onTouchMove(e, true)
+    canvas.ontouchstart = (e) => onTouchStart(e, DeviceType.MOBILE)
+    canvas.ontouchmove = (e) => onTouchMove(e, DeviceType.MOBILE)
     canvas.ontouchend = onTouchEnd
 
-    canvas.onmousedown = (e) => onTouchStart(e, false)
-    canvas.onmousemove = (e) => onTouchMove(e, false)
+    canvas.onmousedown = (e) => onTouchStart(e, DeviceType.COMPUTER)
+    canvas.onmousemove = (e) => onTouchMove(e, DeviceType.COMPUTER)
     canvas.onmouseup = onTouchEnd
 
     return {
