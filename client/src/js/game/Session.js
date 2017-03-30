@@ -6,6 +6,7 @@ import {InputConstructor, Input} from "./input/Input";
 export const SessionConstructor = (sessionData) => {
     let f = window.facade
     const _state = {
+        baseLocation: Number.NaN,
         data: SessionDataConstructor(),
         input: InputConstructor(f.renderer.domObject, f.renderer.camera),
         model: null,
@@ -26,7 +27,9 @@ export const SessionConstructor = (sessionData) => {
             _state.input.intersector.test(_state.grid.children, _state.input.pointer.lastClick, f.renderer.domObject)
             // console.timeEnd('intersection')
             if (_state.input.intersector.anySelected) {
-                // console.log(_state.input.intersector.selection)
+                const selection = _state.input.intersector.selection
+                const p = _state.grid.getHex(selection).visual.position
+                console.log(selection, Math.atan2(p.z, p.x) * 180/Math.PI, _state.grid.utils.angleFromIndex(selection) * 180/Math.PI)
             }
         }
         _state.input.update() // update will nullify dx
@@ -73,9 +76,20 @@ export const SessionConstructor = (sessionData) => {
                     }
                 }
             } else {
-                myStartLocation = 50 // we dont give a fuck in offline
+                for (let i = 0; i < mapData.layout.length; i++) {
+                    if (mapData.layout[i] !== 1) continue
+                    myStartLocation = i// we dont give a fuck in offline
+                    break
+                }
             }
             console.log('session: my location: ' + myStartLocation)
+            _state.baseLocation = myStartLocation
+
+            //
+            // rotate grid root so our start location is
+            // looking directly at the camera
+            _state.grid.setAngle(_state.grid.utils.angleFromIndex(myStartLocation))
+
             _gameUpdater()
         })      
     })
