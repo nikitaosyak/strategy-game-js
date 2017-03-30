@@ -11,6 +11,10 @@ export const InputConstructor = (canvasDom, camera) => {
 
     return {
         get pointer() { return pointer },
-        get intersector() { return intersector }
+        get intersector() { return intersector },
+        update: () => {
+            pointer.update()
+            intersector.update()
+        }
     }
 }

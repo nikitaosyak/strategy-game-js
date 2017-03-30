@@ -22,14 +22,14 @@ export const SessionConstructor = (sessionData) => {
             _state.grid.rotate(Math.atan2(projVector.x, 0.40))
         }
         if (_state.input.pointer.lastClick.click) {
-            // console.log(_state.input.pointer.lastClick)
-            console.time('intersection')
+            // console.time('intersection')
             _state.input.intersector.test(_state.grid.children, _state.input.pointer.lastClick, f.renderer.domObject)
-            console.timeEnd('intersection')
-            _state.input.pointer.deleteClick()
-
+            // console.timeEnd('intersection')
+            if (_state.input.intersector.anySelected) {
+                // console.log(_state.input.intersector.selection)
+            }
         }
-        _state.input.pointer.update() // update will nullify dx
+        _state.input.update() // update will nullify dx
 
         // check uplink
 

@@ -75,12 +75,12 @@ export const PointerInputConstructor = (canvas) => {
         get dx() { return _state.delta.x },
         get dy() { return _state.delta.y },
 
-        deleteClick: () => _state.clickInfo.click = false,
         update: () => {
             _state.downAnchor.x = _state.frameAnchor.x
             _state.downAnchor.y = _state.frameAnchor.y
             _state.delta.x = _state.delta.y = 0
 
+            _state.clickInfo.click = false
             // _state.frameAnchor.x = _state.frameAnchor.y = Number.NaN
         },
     }
