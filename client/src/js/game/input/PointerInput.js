@@ -1,13 +1,6 @@
-export const SessionInputTarget = {
-    CANVAS: 'canvas'
-}
+import {Input} from "./Input";
 
-export const DeviceType = {
-    COMPUTER: 'computer',
-    MOBILE: 'mobile'
-}
-
-export const SessionInputConstructor = (canvas) => {
+export const PointerInputConstructor = (canvas) => {
     const _state = {
         isDown: false,
         clickInfo: {click: false, x: 0, y: 0},
@@ -23,14 +16,14 @@ export const SessionInputConstructor = (canvas) => {
 
         _state.clickInfo.click = false
         _state.isDown = true
-        _state.target = SessionInputTarget.CANVAS
+        _state.target = Input.SessionInputTarget.CANVAS
 
         switch (deviceType) {
-            case DeviceType.COMPUTER:
+            case 'computer':
                 _state.clickInfo.x = _state.downAnchor.x = _state.frameAnchor.x = e.clientX
                 _state.clickInfo.y = _state.downAnchor.y = _state.frameAnchor.y = e.clientY
                 break
-            case DeviceType.MOBILE:
+            case 'mobile':
                 _state.clickInfo.x = _state.downAnchor.x = _state.frameAnchor.x = e.touches.item(0).clientX
                 _state.clickInfo.y = _state.downAnchor.y = _state.frameAnchor.y = e.touches.item(0).clientY
                 break
@@ -44,11 +37,11 @@ export const SessionInputConstructor = (canvas) => {
 
         _state.downMove = _state.isDown
         switch (deviceType) {
-            case DeviceType.COMPUTER:
+            case 'computer':
                 _state.frameAnchor.x = e.clientX
                 _state.frameAnchor.y = e.clientY
                 break
-            case DeviceType.MOBILE:
+            case 'mobile':
                 _state.frameAnchor.x = e.touches.item(0).clientX
                 _state.frameAnchor.y = e.touches.item(0).clientY
                 break
@@ -67,12 +60,12 @@ export const SessionInputConstructor = (canvas) => {
         _state.target = null
     }
 
-    canvas.ontouchstart = (e) => onTouchStart(e, DeviceType.MOBILE)
-    canvas.ontouchmove = (e) => onTouchMove(e, DeviceType.MOBILE)
+    canvas.ontouchstart = (e) => onTouchStart(e, 'mobile')
+    canvas.ontouchmove = (e) => onTouchMove(e, 'mobile')
     canvas.ontouchend = onTouchEnd
 
-    canvas.onmousedown = (e) => onTouchStart(e, DeviceType.COMPUTER)
-    canvas.onmousemove = (e) => onTouchMove(e, DeviceType.COMPUTER)
+    canvas.onmousedown = (e) => onTouchStart(e, 'computer')
+    canvas.onmousemove = (e) => onTouchMove(e, 'computer')
     canvas.onmouseup = onTouchEnd
 
     return {

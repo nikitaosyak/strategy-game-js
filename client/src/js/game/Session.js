@@ -1,13 +1,13 @@
 import {GameModelConstructor} from './GameModel'
 import {SessionDataConstructor} from './SessionData'
 import {HexagonGridConstructor} from './HexagonGrid'
-import {SessionInputConstructor, SessionInputTarget} from "./SessionInput";
+import {InputConstructor, Input} from "./input/Input";
 
 export const SessionConstructor = (sessionData) => {
     let f = window.facade
     const _state = {
         data: SessionDataConstructor(),
-        input: SessionInputConstructor(f.renderer.domObject),
+        input: InputConstructor(f.renderer.domObject, f.renderer.camera),
         model: null,
         grid: null
     }
@@ -17,15 +17,19 @@ export const SessionConstructor = (sessionData) => {
         requestAnimationFrame(_gameUpdater)
 
         // check input
-        if (_state.input.target === SessionInputTarget.CANVAS && _state.input.wasMove) {
-            const projVector = new THREE.Vector3(((_state.input.dx + window.innerWidth/2)/window.innerWidth) * 2 - 1, 0, 0.5)
+        if (_state.input.pointer.target === Input.SessionInputTarget.CANVAS && _state.input.pointer.wasMove) {
+            const projVector = new THREE.Vector3(((_state.input.pointer.dx + window.innerWidth/2)/window.innerWidth) * 2 - 1, 0, 0.5)
             _state.grid.rotate(Math.atan2(projVector.x, 0.40))
         }
-        if (_state.input.lastClick.click) {
-            console.log(_state.input.lastClick)
-            _state.input.deleteClick()
+        if (_state.input.pointer.lastClick.click) {
+            // console.log(_state.input.pointer.lastClick)
+            console.time('intersection')
+            _state.input.intersector.test(_state.grid.children, _state.input.pointer.lastClick, f.renderer.domObject)
+            console.timeEnd('intersection')
+            _state.input.pointer.deleteClick()
+
         }
-        _state.input.update() // update will nullify dx
+        _state.input.pointer.update() // update will nullify dx
 
         // check uplink
 

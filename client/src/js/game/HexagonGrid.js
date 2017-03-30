@@ -45,6 +45,7 @@ export const HexagonGridConstructor = (template) => {
     }
 
     return {
+	    get children() { return _state.gridRoot.children },
 	    rotate: (angle) => {
 	        // console.log(eulerAngle, Math.atan2(eulerAngle, 20) * 180/Math.PI)
 	        _state.gridRoot.rotation.y += angle
