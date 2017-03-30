@@ -34,7 +34,7 @@ export const HexagonGridConstructor = (template) => {
             const z = radius * Math.sin(travelAngleRad)
 
             const index = j * template.meta.width + i
-            const hex = HexagonConstructor('hex' + index, index, 'assets/models/hex_test')
+            const hex = HexagonConstructor('hex' + index, index, template.layout[index], 'assets/models/hex_test')
             hex.loadVisual().then(() => {
 	            hex.visual.gameIndex = index
                 hex.visual.position.x = x
@@ -42,6 +42,8 @@ export const HexagonGridConstructor = (template) => {
                 hex.visual.position.z = z
                 hex.visual.rotation.y = Math.PI/2 - travelAngleRad
                 _state.gridRoot.add(hex.visual)
+
+                hex.init()
             })
         }
     }

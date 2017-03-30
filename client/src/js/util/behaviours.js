@@ -12,7 +12,7 @@ export const visualLoader = (state) => ({loadVisual: () => {
                             state.visual = child
                             child.material = new THREE.MeshPhongMaterial(
                                 {
-                                    color: 0xffffff,
+                                    color: 0xff00ff,
                                     side: THREE.DoubleSide,
                                     map: texture
                                 }
