@@ -20,7 +20,7 @@ export const SessionConstructor = (sessionData) => {
         // check input
         if (_state.input.pointer.target === Input.SessionInputTarget.CANVAS && _state.input.pointer.wasMove) {
             const projVector = new THREE.Vector3(((_state.input.pointer.dx + window.innerWidth/2)/window.innerWidth) * 2 - 1, 0, 0.5)
-            _state.grid.rotate(Math.atan2(projVector.x, 0.40))
+            _state.grid.rotate(Math.atan2(projVector.x, 1))
         }
         if (_state.input.pointer.lastClick.click) {
             // console.time('intersection')

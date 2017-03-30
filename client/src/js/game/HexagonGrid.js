@@ -35,8 +35,8 @@ export const HexagonGridConstructor = (template) => {
     const rowOffset = facetRadius + capHeight
     const calculatedHeight = rowOffset * (template.meta.height-1)
 
-	const radius = facetWidth / (2 * Math.tan(Math.PI / 11))
-    f.renderer.camera.position.x = 20
+	const radius = facetWidth / (2 * Math.tan(Math.PI / template.meta.width))
+    f.renderer.camera.position.x = 23
     f.renderer.camera.position.y = 0
     f.renderer.camera.lookAt({x:0, y: 0, z:0})
 
@@ -65,6 +65,7 @@ export const HexagonGridConstructor = (template) => {
     }
 
     return {
+	    get radius() { return radius },
 	    get children() { return _state.gridRoot.children },
         get utils() { return _state.utils },
         getHex: (index) => _state.grid[index],

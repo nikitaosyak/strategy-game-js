@@ -34,6 +34,9 @@ export const HexagonConstructor = (name, index, template, visualPath) => {
                 case 10: // resource point
                     _state.visual.material.color.setHex(0x0000CC)
                     break
+                case 20: // wall point
+                    _state.visual.material.color.setHex(0x000000)
+                    break
                 default:
                     throw 'Hexagon.init: unknown hexagon template'
                     break
