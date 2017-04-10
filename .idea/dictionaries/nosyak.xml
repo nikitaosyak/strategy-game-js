@@ -9,6 +9,7 @@
       <w>ontouchmove</w>
       <w>ontouchstart</w>
       <w>preved</w>
+      <w>stringified</w>
     </words>
   </dictionary>
 </component>

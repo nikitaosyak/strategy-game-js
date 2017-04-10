@@ -186,7 +186,7 @@
       <option name="m_minLength" value="4" />
       <option name="m_maxLength" value="32" />
     </inspection_tool>
-    <inspection_tool class="FunctionWithInconsistentReturnsJS" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="FunctionWithInconsistentReturnsJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="FunctionWithMultipleLoopsJS" enabled="true" level="WARNING" enabled_by_default="false">
@@ -366,7 +366,7 @@
     <inspection_tool class="JSUnresolvedVariable" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <scope name="client libraries" level="WEAK WARNING" enabled="false" />
     </inspection_tool>
-    <inspection_tool class="JSUnusedAssignment" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="JSUnusedAssignment" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="client libraries" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="JSUnusedGlobalSymbols" enabled="true" level="WARNING" enabled_by_default="true">
