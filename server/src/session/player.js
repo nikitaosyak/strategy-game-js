@@ -13,8 +13,7 @@ module.exports.createPlayer = (user) => {
         flushTurn: () => _turnFlushed = true,
         setTurnHook: (response) =>  {
             if (_turnHook !== null) {
-                Logger.warn('Player:setTurnHook: turn hook already exists!')
-                return false
+                return 'turn hook already exists on player: ' + user.token
             }
 
             _turnHook = response

@@ -18,23 +18,44 @@ export const getUrlVars = (address, path, ...args) => {
     return result
 }
 
-export const getRequest = (url) => {
+export const getRequest = (url, timeout = 2000) => {
     return new Promise((resolve, reject) => {
-        var req = new XMLHttpRequest()
+        const req = new XMLHttpRequest()
+        req.timeout = timeout
         req.addEventListener('error', reject)
         req.addEventListener('abort', reject)
-        req.open('GET', url)
+        req.open('GET', url, true)
         req.onreadystatechange = () => {
             if (req.readyState === 4 && req.status === 200) {
                 const jsonData = JSON.parse(req.responseText)
                 if (jsonData.status === 'OK') {
                     resolve(jsonData)
                 } else {
-                    throw 'http.getRequest failed: ' + req.responseText
-                    reject()
+                    reject('http.getRequest failed: ' + req.responseText)
                 }
             }
         }
         req.send()
+    })
+}
+
+export const postRequest = (url, strData) => {
+    return new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest()
+        req.addEventListener('error', reject)
+        req.addEventListener('abort', reject)
+        req.open('POST', url, true)
+
+        req.onreadystatechange = () => {
+            if (req.readyState === 4 && req.status === 200) {
+                const jsonData = JSON.parse(req.responseText)
+                if (jsonData.status === 'OK') {
+                    resolve(jsonData)
+                } else {
+                    reject('http.getRequest failed: ' + req.responseText)
+                }
+            }
+        }
+        req.send(strData)
     })
 }

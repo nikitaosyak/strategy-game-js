@@ -2,15 +2,17 @@
 export const SessionDataConstructor = () => {
     const _state = {
         initialized: false,
+        userToken: '',
         token: '',
         myIndex: -1,
         players: null,
-        turn: -1
+        turn: 0
     }
 
     return {
         get initialized() { return _state.initialized },
         get token() { return _state.token },
+        get userToken() { return _state.userToken },
         get myIndex() { return _state.myIndex },
         get turn() { return _state.turn },
 
@@ -23,6 +25,7 @@ export const SessionDataConstructor = () => {
         initialize: (myUserToken, sessionToken, players) => {
             _state.initialized = true
             _state.token = sessionToken
+            _state.userToken = myUserToken
             _state.players = players
 
             for (let i = 0; i < players.length; i++) {

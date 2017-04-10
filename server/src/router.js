@@ -58,15 +58,15 @@ module.exports.createRouter = (game) => {
         const query = url_parse(req.url, true).query
 
         try {
-            const success = game.getSession(query.session_token)
+            const result = game.getSession(query.session_token)
                 .storeHook(
                     query.user_token,
-                    query.turn_number,
+                    Number(query.turn_number),
                     res
                 )
-            if (!success) {
-                Logger.error('Router: cannot set turn hook for %s on turn %d',
-                    query.user_token, query.turn_number)
+            if (result !== true) {
+                Logger.error('Router: cannot set turn hook for %s on turn %d: %s',
+                    query.user_token, query.turn_number, result)
                 request.send_fail_standard(res)
             }
         }

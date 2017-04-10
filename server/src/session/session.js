@@ -3,6 +3,7 @@
 module.exports.createSession = (token, user1, user2) => {
     const settings = require('./../util/settings').content
     const player = require('./player')
+    const request = require('../util/request_util')
 
     const State = {
         WAITING_USERS: 'waiting_users',
@@ -33,9 +34,9 @@ module.exports.createSession = (token, user1, user2) => {
     const _endTurn = () => {
         const turnCommandsStr = JSON.stringify({status: 'OK', commands: _turnCommands})
         _turnCommands = []
-        // Logger.info('Session: will send commands: %s', turnCommandsStr)
+        Logger.info('Session: will send commands: %s', turnCommandsStr)
         _players.forEach((p, i) => {
-            if (_state == State.SESSION_ENDED) return
+            if (_state === State.SESSION_ENDED) return
 
             if (p.getUser().isStale()) {
                 Logger.warn('Session:endTurn: user %d is stale!', i)
@@ -68,12 +69,12 @@ module.exports.createSession = (token, user1, user2) => {
     //
     // public methods
     const self = {
-        isDone: () => State == State.SESSION_ENDED,
+        isDone: () => State === State.SESSION_ENDED,
         getToken: () => _token,
         getPlayer: (userToken) => {
             for (let i = 0; i < _players.length; i++) {
                 const user = _players[i].getUser()
-                if (user.getToken() == userToken) return _players[i]
+                if (user.getToken() === userToken) return _players[i]
             }
             return null
         },
@@ -83,14 +84,15 @@ module.exports.createSession = (token, user1, user2) => {
         userReady: (userToken) => {
             let success = false
             _users.forEach(user => {
-                if (user.getToken() == userToken) {
+                console.log('requesting ready. usertoken: ' + userToken)
+                if (user.getToken() === userToken) {
                     Logger.log('Session:userReady: approving player %s', user.getToken())
                     _players.push(player.createPlayer(user))
                     success = true
                 }
             })
 
-            if (_players.length == _users.length) {
+            if (_players.length === _users.length) {
                 Logger.log('Session:userReady: all users are ready! match starting!')
                 _startTurn()
             }
@@ -98,27 +100,26 @@ module.exports.createSession = (token, user1, user2) => {
         },
 
         storeHook: (userToken, turnNumber, response) => {
-            if (turnNumber != _turn) return false
+            if (turnNumber !== _turn)
+                return "run numbers does not match. intended: " + _turn + "; player send: " + turnNumber
             const p = self.getPlayer(userToken)
             if (p === null) {
                 _endSession()
-                return false
+                return 'player with token ' + userToken + ' does not exists'
             }
 
-
-            if (p.setTurnHook(response)) {
-                return true
-            }
+            const result = p.setTurnHook(response)
+            if (result === true) return result
             _endSession()
-            return false
+            return result
         },
 
         storeCommands: (value) => {
             let success = true
             const commandList = JSON.parse(value)
             commandList.forEach(cmd => {
-                if (cmd.turn == _turn) {
-                    Logger.log('player %s commands: %s', cmd.user_token, cmd.command)
+                if (cmd.turn === _turn) {
+                    Logger.log('player %s command: %s', cmd.user_token, cmd.command)
                     _turnCommands.push(cmd)
                 } else {
                     success = false
@@ -128,7 +129,7 @@ module.exports.createSession = (token, user1, user2) => {
         },
 
         flushTurn: (userToken, turnNumber) => {
-            if (turnNumber != _turn) return false
+            if (turnNumber !== _turn) return false
             const p = self.getPlayer(userToken)
             if (p === null) return false
             p.flushTurn()
@@ -137,12 +138,12 @@ module.exports.createSession = (token, user1, user2) => {
         //
         // update
         update: () => {
-            if (_state == State.SESSION_ENDED) return
+            if (_state === State.SESSION_ENDED) return
 
             const elapsed = (Date.now() - _countStarted) / 1000
             // Logger.info('turn time: %i. turn state: %s', elapsed, _state)
 
-            if (_state == State.TURN_IN_PROGRESS) {
+            if (_state === State.TURN_IN_PROGRESS) {
                 if (elapsed >= settings.lobby.turnTime) { // turn ended due to timeout
                     _endTurn()
                 } else {                     // turn ended due to players flush
@@ -152,19 +153,19 @@ module.exports.createSession = (token, user1, user2) => {
                             flushes += 1
                         }
                     }
-                    if (flushes == _players.length) {
+                    if (flushes === _players.length) {
                         _endTurn()
                     }
                 }
             }
 
-            if (_state == State.BETWEEN_TURN_PAUSE && elapsed >= settings.lobby.turnPauseTime) {
+            if (_state === State.BETWEEN_TURN_PAUSE && elapsed >= settings.lobby.turnPauseTime) {
                 _startTurn()
             }
         }
     }
 
-    if (ENV == 'TEST') {
+    if (ENV === 'TEST') {
         self.State = State
         self._users = _users
         self._players = _players

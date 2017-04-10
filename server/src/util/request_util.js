@@ -22,15 +22,15 @@ module.exports.send_fail = (res, str_data) => {
 
 module.exports.standardRequestHandle = (response, task, errLog, answer = null) => {
     try {
-        const success = task()
-        if (success) {
+        const taskResult = task()
+        if (taskResult === true) {
             if (answer === null) {
                 exports.send_ok_standard(response)
             } else {
                 exports.send_ok(response, answer)
             }
         } else {
-            Logger.error('StandardRequestHandle: SOFT_ERROR: ' + errLog)
+            Logger.error('StandardRequestHandle: SOFT_ERROR: [%s] %s ', taskResult,  errLog)
             exports.send_fail_standard('Soft error: ' + response)
         }
     } catch (e) {
