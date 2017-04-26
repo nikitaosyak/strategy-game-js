@@ -18,12 +18,13 @@ export const getUrlVars = (address, path, ...args) => {
     return result
 }
 
-export const getRequest = (url, timeout = 2000) => {
+export const getRequest = (url, timeout = 500) => {
     return new Promise((resolve, reject) => {
         const req = new XMLHttpRequest()
         req.timeout = timeout
         req.addEventListener('error', reject)
         req.addEventListener('abort', reject)
+        req.addEventListener('timeout', reject)
         req.open('GET', url, true)
         req.onreadystatechange = () => {
             if (req.readyState === 4 && req.status === 200) {
