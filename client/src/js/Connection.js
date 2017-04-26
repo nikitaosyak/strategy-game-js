@@ -81,7 +81,10 @@ export const ConnectionConstructor = (host, port) => {
                     getRequest(path, 30000).then((response) => resolve(response.commands), reject)
                 })
             } else {
-                throw 'Connection.turnHook: offline'
+                // offline emulation
+                return new Promise((resolve, _) => {
+                    setTimeout(resolve, 1000, [])
+                })
             }
         },
         /**

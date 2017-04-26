@@ -1,7 +1,7 @@
 import {CommandSerializer} from "./CommandSerializer";
 import {CommandExecutor} from "./CommandExecutor";
 
-export const Commands = (connection, sessionData, hexagonGrid) => {
+export const Commands = (connection, sessionData, es) => {
     const _serializer = CommandSerializer(sessionData)
     const _executor = CommandExecutor()
 

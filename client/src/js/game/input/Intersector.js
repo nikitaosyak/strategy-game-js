@@ -3,14 +3,17 @@ import {intersectSelectionTest} from "../../util/behaviours";
 export const IntersectorConstructor = (camera) => {
 
     const _state = {
-        selected: Number.NaN,
+        selected: null,
         camera: camera
     }
 
     const self = {
-        get anySelected() { return !Number.isNaN(_state.selected) },
+        /** @returns {boolean} */
+        get anySelected() { return _state.selected !== null },
+        /** @returns {*} selected component or null */
         get selection() { return _state.selected },
-        update: () => { _state.selected = Number.NaN }
+
+        update: () => { _state.selected = null }
     }
 
     Object.assign(self, intersectSelectionTest(_state))

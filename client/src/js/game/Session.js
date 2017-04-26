@@ -3,12 +3,16 @@ import {SessionDataConstructor} from './SessionData'
 import {HexagonGridConstructor} from './HexagonGrid'
 import {InputConstructor, Input} from "./input/Input";
 import {Commands} from "./command/Commands";
+import {ESConstructor} from "./es/ES";
+import {CONST} from "../util/const";
 
 export const SessionConstructor = (rawSessionData) => {
     let f = window.facade
 
     const data = SessionDataConstructor()
     const input = InputConstructor(f.renderer.domObject, f.renderer.camera)
+    const es = ESConstructor(f.renderer)
+
     let baseLocation = Number.NaN
     let model = null
     let grid = null
@@ -27,17 +31,19 @@ export const SessionConstructor = (rawSessionData) => {
             input.intersector.test(grid.children, input.pointer.lastClick, f.renderer.domObject)
             // console.timeEnd('intersection')
             if (input.intersector.anySelected) {
-                const selection = input.intersector.selection
-                const p = grid.getHex(selection).visual.position
-                console.log(selection, Math.atan2(p.z, p.x) * 180/Math.PI, grid.utils.angleFromIndex(selection) * 180/Math.PI)
+                const selectedComponent = input.intersector.selection
+                const hexIndex = selectedComponent.getNeighbour('logic').index
+                const p = selectedComponent.mesh.position
+                console.log(hexIndex, Math.atan2(p.z, p.x) * CONST.MATH.RAD_TO_DEG,
+                    grid.utils.angleFromIndex(hexIndex) * CONST.MATH.RAD_TO_DEG)
             }
         }
         input.update() // update will nullify dx
 
         // check uplink
 
-        // update visual
-        f.renderer.update()
+        // update game logic
+        es.update()
     }
 
     const _gameTurn = () => {
@@ -58,6 +64,7 @@ export const SessionConstructor = (rawSessionData) => {
         rawSessionData.session_token,
         rawSessionData.users
     )
+    cmd = Commands(f.connection, data, es)
     // f.connection.traceState()
     // data.traceState()
 
@@ -73,7 +80,7 @@ export const SessionConstructor = (rawSessionData) => {
                 //
                 // create visual grid
                 grid = HexagonGridConstructor(mapData)
-                cmd = Commands(f.connection, data, grid)
+                es.add('grid', grid)
 
                 //
                 // determine self start location (tile-wise)
