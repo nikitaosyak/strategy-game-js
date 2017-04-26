@@ -96,7 +96,7 @@ module.exports.createLobby = () => {
 
             let containsUser = false
             _waitingQueue.forEach(item => {
-                if (item.user.getToken() == token) {
+                if (item.user.getToken() === token) {
                     containsUser = true
                 }
             })
@@ -110,7 +110,7 @@ module.exports.createLobby = () => {
         }
     }
 
-    if (ENV == 'TEST') {
+    if (ENV === 'TEST') {
         self._users = _users
         self._sessions = _sessions
         self._waitingQueue = _waitingQueue
