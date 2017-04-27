@@ -52,7 +52,6 @@ export const ThreejsComponentConstructor = (name) => {
                         })
 
                         if (state.loaded) {
-                            console.log('loaded!')
                             resolve()
                         } else {
                             reject('Unable to find mesh child')
