@@ -13,7 +13,7 @@ export const getUrlVars = (address, path, ...args) => {
         }
     }
 
-    console.log('http.getUrlVars: ' + result)
+    // console.log('http.getUrlVars: ' + result)
 
     return result
 }

@@ -86,7 +86,7 @@ export const SessionConstructor = (rawSessionData) => {
                 // determine self start location (tile-wise)
                 // start location tiles is coded with '1' tile type
                 let myStartLocation = -1
-                if (f.connection.isOnline()) {
+                if (f.connection.isOnline) {
                     let currentPointIndex = 0
                     for (let i = 0; i < mapData.layout.length; i++) {
                         if (mapData.layout[i] !== 1) continue
@@ -104,7 +104,7 @@ export const SessionConstructor = (rawSessionData) => {
                         break
                     }
                 }
-                console.log('session: my location: ' + myStartLocation)
+                console.info('starting location: ' + myStartLocation)
                 baseLocation = myStartLocation
 
                 //

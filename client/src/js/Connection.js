@@ -8,25 +8,22 @@ import {postRequest} from './util/http'
  * @constructor
  */
 export const ConnectionConstructor = (host, port) => {
-    const _state = {
-        host: host,
-        port: port,
-        address: host + ':' + port.toString(),
-        online: false,
-        token: "DEADBEEF"
-    }
+
+    const address = host + ':' + port.toString()
+    let online = false
+    let token = "DEADBEEF"
 
     return {
-        get address() { return _state.address },
-        get token() { return _state.token },
-        isOnline: () => _state.online,
+        get address() { return address },
+        get token() { return token },
+        get isOnline() { return online },
         /** @returns {Promise} */
         connect: () => {
             return new Promise((resolve, reject) => {
-                const path =  getUrlVars(_state.address, 'hello')
+                const path =  getUrlVars(address, 'hello')
                 getRequest(path).then((data) => {
-                    _state.token = data.token
-                    _state.online = true
+                    token = data.token
+                    online = true
                     resolve()
                 },
                 () => {
@@ -36,11 +33,9 @@ export const ConnectionConstructor = (host, port) => {
         },
         /** @returns {Promise} */
         enqueue: () => {
-            if (_state.online) {
+            if (online) {
                 return new Promise((resolve, reject) => {
-                    const path = getUrlVars(
-                        _state.address, 'queue',
-                        'user_token', _state.token)
+                    const path = getUrlVars(address, 'queue', 'user_token', token)
                     getRequest(path).then(resolve, reject)
                 })
             } else {
@@ -52,10 +47,10 @@ export const ConnectionConstructor = (host, port) => {
          * @returns {Promise}
          */
         ready: (sessionToken) => {
-            if (_state.online) {
+            if (online) {
                 const path = getUrlVars(_state.address,
                     'session_player_ready',
-                    'user_token', _state.token,
+                    'user_token', token,
                     'session_token', sessionToken)
 
                 return new Promise((resolve, reject) => {
@@ -63,7 +58,6 @@ export const ConnectionConstructor = (host, port) => {
                 })
             } else {
                 return new Promise((resolve, _) => {
-                    console.log("Connection: ready")
                     resolve()
                 })
             }
@@ -74,9 +68,9 @@ export const ConnectionConstructor = (host, port) => {
          * @returns {Promise}
          */
         turnHook: (sessionToken, turn) => {
-            if (_state.online) {
-                const path = getUrlVars(_state.address, 'session_turn_hook',
-                    'user_token', _state.token, 'session_token', sessionToken, 'turn_number', turn)
+            if (online) {
+                const path = getUrlVars(address, 'session_turn_hook',
+                    'user_token', token, 'session_token', sessionToken, 'turn_number', turn)
                 return new Promise((resolve, reject) => {
                     getRequest(path, 30000).then((response) => resolve(response.commands), reject)
                 })
@@ -93,9 +87,9 @@ export const ConnectionConstructor = (host, port) => {
          * @returns {Promise}
          */
         flushTurn: (sessionToken, turn) => {
-            if (!_state.online) throw 'Connection.flushTurn: offline'
-            getUrlVars(_state.address, 'session_flush_turn',
-                'user_token', _state.token, 'session_token', sessionToken)
+            if (!online) throw 'Connection.flushTurn: offline'
+            getUrlVars(address, 'session_flush_turn',
+                'user_token', token, 'session_token', sessionToken)
             return new Promise((resolve, reject) => {
                 reject('flush turn: not implemented')
             })
@@ -106,8 +100,8 @@ export const ConnectionConstructor = (host, port) => {
          * @returns {Promise}
          */
         command: (sessionToken, value) => {
-            if (_state.online) {
-                const path = getUrlVars(_state.address, 'session_player_command', 'session_token', sessionToken)
+            if (online) {
+                const path = getUrlVars(address, 'session_player_command', 'session_token', sessionToken)
                 return new Promise((resolve, reject) => {
                     postRequest(path, value).then(resolve, reject)
                 })
@@ -117,7 +111,7 @@ export const ConnectionConstructor = (host, port) => {
         },
 
         traceState: () => {
-            console.log(_state)
+            console.log("Connection: host: %s, port: %s, online: %s, token: %s", host, port, online, token)
         }
     }
 }

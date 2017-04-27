@@ -31,7 +31,8 @@ gulp.task('pack', ['clean'], () => {
         },
         output: {
             filename: 'bundle.js'
-        }
+        },
+        devtool: "source-map"
     }
 
     return gulp.src('src/js/**/*.js')

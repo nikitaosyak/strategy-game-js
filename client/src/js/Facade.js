@@ -7,15 +7,13 @@ import {ConnectionConstructor} from './Connection'
  * @constructor
  */
 export const FacadeConstructor = () => {
-    const _state = {
-        resourceLoader: ResourceLoaderConstructor(),
-        connection: ConnectionConstructor('localhost', 8181),
-        renderer: ThreeJsRendererConstructor()
-    }
+    const resourceLoader = ResourceLoaderConstructor()
+    const connection = ConnectionConstructor('localhost', 8181)
+    const renderer = ThreeJsRendererConstructor()
 
     return {
-        get connection() { return _state.connection},
-        get renderer() { return _state.renderer },
-        get resourceLoader() { return _state.resourceLoader }
+        get connection() { return connection},
+        get renderer() { return renderer },
+        get resourceLoader() { return resourceLoader }
     }
 }

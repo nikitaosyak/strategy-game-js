@@ -1,13 +1,15 @@
 import {FacadeConstructor} from './Facade'
 import {SessionConstructor} from './game/Session'
 
-//
-// initialize game
 const f = window.facade = FacadeConstructor()
 
 f.connection.connect().then(
     () => {
-        console.log('main: uplink estableashed. Token: %s', f.connection.token)
+        if (f.connection.isOnline) {
+            console.info('uplink established. Token: %s', f.connection.token)
+        } else {
+            console.warn('uplink not possible. starting OFFLINE mode')
+        }
         f.connection.enqueue().then(
             SessionConstructor,
             () => {
@@ -15,6 +17,6 @@ f.connection.connect().then(
             })
     },
     () => {
-        console.log('main: uplink not possible. starting OFFLINE mode')
+        console.info('uplink not possible. starting OFFLINE mode')
         SessionConstructor({session_token:'DEADBEEF', users:['DEADBEEF']})
     })
