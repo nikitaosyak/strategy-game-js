@@ -2,6 +2,12 @@ import {
     entityAddChild, entityAddComponent, entityGetAnyChildren, entityGetChildren, entityGetComponent, entityGetName,
     entityUpdate
 } from "./entityBehaviours";
+
+/**
+ * Create entity as a container for components
+ * @param name Name is for easy debug purposes
+ * @constructor
+ */
 export const EntityConstructor = (name) => {
 
     const components = new Map()
