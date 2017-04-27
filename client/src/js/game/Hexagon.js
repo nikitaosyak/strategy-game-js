@@ -1,12 +1,12 @@
-/**
- * @param {string} name
- * @param {number} index
- * @param {number} template
- * @constructor
- */
 import {componentGetName, componentGetNeighbour, componentInjectOwner} from "./es/componentBehaviours";
 import {debugTraceState} from "../util/behaviours";
 
+/**
+ * @param name
+ * @param index
+ * @param template
+ * @constructor
+ */
 export const HexagonConstructor = (name, index, template) => {
     const state = {
         name: name,

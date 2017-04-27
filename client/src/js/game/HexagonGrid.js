@@ -35,11 +35,6 @@ export const HexagonGridConstructor = (template) => {
 	}
 
     const self = {
-        // entity overrides
-        addComponent: (key, value) => { throw self.name + ' does not support component addition' },
-        getComponent: (key) => { throw self.name + ' does not support component getting' },
-
-        //
         get radius() { return radius },
         get children() { return _state.gridRoot.children },
         get utils() { return _state.utils },

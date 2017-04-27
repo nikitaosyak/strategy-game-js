@@ -11,7 +11,7 @@ export const SessionConstructor = (rawSessionData) => {
 
     const data = SessionDataConstructor()
     const input = InputConstructor(f.renderer.domObject, f.renderer.camera)
-    const es = ESConstructor(f.renderer)
+    const es = ESConstructor(null, f.renderer.update)
 
     let baseLocation = Number.NaN
     let model = null
