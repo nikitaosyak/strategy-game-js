@@ -1,5 +1,5 @@
-import {componentGetName, componentGetNeighbour, componentInjectOwner} from "./es/componentBehaviours";
-import {debugTraceState} from "../util/behaviours";
+import {componentGetName, componentGetNeighbour, componentInjectOwner} from "../componentBehaviours";
+import {debugTraceState} from "../../../util/behaviours";
 
 /**
  * @param name
@@ -7,7 +7,7 @@ import {debugTraceState} from "../util/behaviours";
  * @param template
  * @constructor
  */
-export const HexagonConstructor = (name, index, template) => {
+export const HexagonComponentConstructor = (name, index, template) => {
     const state = {
         name: name,
         index: index,
@@ -19,7 +19,7 @@ export const HexagonConstructor = (name, index, template) => {
         init: () => {
             const visual = self.getNeighbour('visual')
 
-            if (visual.loaded) {
+            if (visual.isLoaded) {
                 switch (state.template) {
                     case 0: // empty
                         visual.mesh.material.color.setHex(0xFFFFFF)

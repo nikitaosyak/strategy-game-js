@@ -96,14 +96,14 @@ export const ConnectionConstructor = (host, port) => {
         },
         /**
          * @param {string} sessionToken
-         * @param {object} value
+         * @param {string} serializedCommand
          * @returns {Promise}
          */
-        command: (sessionToken, value) => {
+        sendCommand: (sessionToken, serializedCommand) => {
             if (online) {
                 const path = getUrlVars(address, 'session_player_command', 'session_token', sessionToken)
                 return new Promise((resolve, reject) => {
-                    postRequest(path, value).then(resolve, reject)
+                    postRequest(path, serializedCommand).then(resolve, reject)
                 })
             } else {
                 return new Promise((resolve, _) => resolve())

@@ -1,13 +1,14 @@
-import {
-    entityAddChild, entityAddComponent, entityGetAnyChildren, entityGetChildren, entityGetComponent, entityGetName,
-    entityUpdate
-} from "./entityBehaviours";
-
 /**
  * Create entity as a container for components
  * @param name Name is for easy debug purposes
  * @constructor
  */
+import {
+    entityAddChild, entityAddComponent, entityGetAnyChildren, entityGetChild, entityGetComponent,
+    entityGetName,
+    entityUpdate
+} from "./entityBehaviours";
+
 export const EntityConstructor = (name) => {
 
     const state = {
@@ -22,8 +23,8 @@ export const EntityConstructor = (name) => {
     Object.assign(self, entityUpdate(state))
 
     Object.assign(self, entityAddChild(state))
+    Object.assign(self, entityGetChild(state))
     Object.assign(self, entityGetAnyChildren(state))
-    Object.assign(self, entityGetChildren(state))
 
     Object.assign(self, entityAddComponent(self, state))
     Object.assign(self, entityGetComponent(state))

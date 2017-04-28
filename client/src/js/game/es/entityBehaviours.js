@@ -10,17 +10,21 @@ export const entityUpdate = (state) => ({
      * Update all containing entities
      */
     update: () => {
-        state.components.forEach(comp => {
-            if ('update' in comp) {
-                comp.update()
-            }
-        })
+        if ('components' in state) {
+            state.components.forEach(comp => {
+                if ('update' in comp) {
+                    comp.update()
+                }
+            })
+        }
 
-        state.children.forEach(child => {
-            if ('update' in child) {
-                child.update()
-            }
-        })
+        if ('children' in state) {
+            state.children.forEach(child => {
+                if ('update' in child) {
+                    child.update()
+                }
+            })
+        }
     }
 })
 
@@ -34,20 +38,31 @@ export const entityAddChild = (state) => ({
     }
 })
 
+export const entityGetChild = (state) => ({
+    /**
+     * Get entity child at index
+     * @param {Number} index
+     * @return {*} child at index
+     * @throws exception
+     */
+    getChild: (index) => state.children[index]
+})
+
+export const entityRemoveChild = (state) => ({
+    /**
+     * @param {Number} index
+     * @return {*} spliced child
+     * @throws exception
+     */
+    removeChild: (index) => state.children.splice(index, 1)
+})
+
 export const entityGetAnyChildren = (state) => ({
     /**
      * Does current entity contains any child entities
      * @returns {boolean}
      */
-    anyChildren: () => { return state.children.length > 0 }
-})
-
-export const entityGetChildren = (state) => ({
-    /**
-     * Get the list of current entities children
-     * @returns {Array}
-     */
-    getChildren: () => { return state.children }
+    anyChildren: () => { return state.children && state.children.length > 0 }
 })
 
 export const entityAddComponent = (self, state) => ({

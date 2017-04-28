@@ -1,14 +1,15 @@
 
 export const CommandSerializer = (sessionData) => {
     let commandList = null
-    let commandListStringified = ''
+    let commandListSerialized = ''
     let currentIdx = Number.NaN
     let dirty = false
+
     const self = {
         begin() {
             dirty = true
             commandList = []
-            commandListStringified = ''
+            commandListSerialized = ''
             return self
         },
         add() {
@@ -20,9 +21,11 @@ export const CommandSerializer = (sessionData) => {
             commandList[currentIdx].turn = sessionData.turn
             return self
         },
-        cmd(command, entityType, entityName) {
+        cmd(verb, entityType, entityClass, entityName) {
             dirty = true
-            commandList[currentIdx].command = entityType + '_' + command
+            commandList[currentIdx].verb = verb
+            commandList[currentIdx].entity_type = entityType
+            commandList[currentIdx].entity_class = entityClass
             commandList[currentIdx].entity_name = entityName
             return self
         },
@@ -32,9 +35,11 @@ export const CommandSerializer = (sessionData) => {
             return self
         },
         getSerialized() {
-            dirty = false
-            commandListStringified = JSON.stringify(commandList)
-            return commandListStringified
+            if (dirty) {
+                dirty = false
+                commandListSerialized = JSON.stringify(commandList)
+            }
+            return commandListSerialized
         },
         getRaw() { return commandList }
     }

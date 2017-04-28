@@ -1,6 +1,6 @@
 import {GameModelConstructor} from './GameModel'
 import {SessionDataConstructor} from './SessionData'
-import {HexagonGridConstructor} from './HexagonGrid'
+import {HexagonGridConstructor} from './es/impl/HexagonGrid'
 import {InputConstructor, Input} from "./input/Input";
 import {Commands} from "./command/Commands";
 import {ESConstructor} from "./es/ES";
@@ -64,7 +64,6 @@ export const SessionConstructor = (rawSessionData) => {
         rawSessionData.session_token,
         rawSessionData.users
     )
-    cmd = Commands(f.connection, data, es)
     // f.connection.traceState()
     // data.traceState()
 
@@ -81,6 +80,7 @@ export const SessionConstructor = (rawSessionData) => {
                 // create visual grid
                 grid = HexagonGridConstructor(mapData)
                 es.add('grid', grid)
+                cmd = Commands(f.connection, data, grid)
 
                 //
                 // determine self start location (tile-wise)
@@ -117,15 +117,31 @@ export const SessionConstructor = (rawSessionData) => {
                 cmd.serializer
                     .begin()
                     .add()
-                    .cmd('structure_add', 'base', 'base')
+                    .cmd('create', 'structure', 'base', 'pohui')
                     .data('location', myStartLocation)
                 cmd.serializer
                     .add()
-                    .cmd('unit_add', 'ork', 'ork1')
+                    .cmd('create', 'unit', 'ork', 'вася')
                     .data('location', myStartLocation+1)
                 cmd.serializer
                     .add()
-                    .cmd('unit_add', 'ork', 'ork2')
+                    .cmd('create', 'unit', 'human', 'коля')
+                    .data('location', myStartLocation-1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'human', 'петя')
+                    .data('location', myStartLocation-1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'ork', 'димон')
+                    .data('location', myStartLocation-1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'human', 'серега')
+                    .data('location', myStartLocation-1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'ork', 'фандорин')
                     .data('location', myStartLocation-1)
                 cmd.performLocal()
 

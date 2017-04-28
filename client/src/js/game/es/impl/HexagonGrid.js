@@ -1,11 +1,12 @@
-import {HexagonConstructor} from './Hexagon'
+import {HexagonComponentConstructor} from './HexagonComponent'
 import {
-    entityAddChild, entityGetAnyChildren, entityGetChildren, entityGetName,
+    entityAddChild, entityGetAnyChildren, entityGetChild, entityGetName,
     entityUpdate
-} from "./es/entityBehaviours";
-import {EntityConstructor} from "./es/Entity";
-import {CONST} from "../util/const";
-import {ThreejsComponentConstructor} from "./es/impl/ThreejsComponent";
+} from "../entityBehaviours";
+import {EntityConstructor} from "../Entity";
+import {CONST} from "../../../util/const";
+import {ThreejsComponentConstructor} from "./ThreejsComponent";
+import {HexagonEntity} from "./HexagonEntity";
 
 const GridUtils = (template) => {
 
@@ -43,15 +44,15 @@ export const HexagonGridConstructor = (template) => {
 
     const self = {
         get utils() { return state.utils },
-        rotate: (angleRad) => state.gridRoot.rotation.y += angleRad,
-        setAngle: (angleRad) => state.gridRoot.rotation.y = angleRad
+        rotate: (angleRad) => { state.gridRoot.rotation.y += angleRad },
+        setAngle: (angleRad) => { state.gridRoot.rotation.y = angleRad }
     }
 
     Object.assign(self, entityGetName(state))
     Object.assign(self, entityUpdate(state))
     Object.assign(self, entityAddChild(state))
+    Object.assign(self, entityGetChild(state))
     Object.assign(self, entityGetAnyChildren(state))
-    Object.assign(self, entityGetChildren(state))
 
 	f.renderer.addToScene(state.gridRoot)
 
@@ -74,10 +75,10 @@ export const HexagonGridConstructor = (template) => {
         const z = gridRadius * Math.sin(travelAngleRad)
         const rotY = Math.PI/2 - travelAngleRad
 
-        const hexagon = EntityConstructor('Hexagon' + i)
+        const hexagon = HexagonEntity('Hexagon' + i)
         self.addChild(hexagon)
 
-        const logic = hexagon.addComponent('logic', HexagonConstructor('logicHexagon' + i, i, template.layout[i]))
+        const logic = hexagon.addComponent('logic', HexagonComponentConstructor('logicHexagon' + i, i, template.layout[i]))
         const visual = hexagon.addComponent('visual', ThreejsComponentConstructor('visualHexagon' + i))
         visual.loadParametrized('assets/models/hex_test', x, y, z, 0, rotY, 0, state.gridRoot).then(logic.init)
     }

@@ -9,9 +9,36 @@ export const ThreejsComponentConstructor = (name) => {
         mesh: null
     }
 
+    const loadCallbackCache = []
+    const resolveLoadCallbackCache = () => {
+        loadCallbackCache.forEach(cb => cb())
+        loadCallbackCache.splice(0, loadCallbackCache.length)
+    }
+
     const self = {
-        get loaded() { return state.loaded },
+        get isLoaded() { return state.loaded },
         get mesh() {return state.mesh},
+        queryLoadDone() {
+            return new Promise((resolve, _) => {
+                if (self.isLoaded) {
+                    resolve()
+                } else {
+                    loadCallbackCache.push(resolve)
+                }
+            })
+        },
+        debugCube: (sizex, sizey, sizez, color) => {
+            const cube = new THREE.Mesh(
+                new THREE.BoxGeometry(sizex, sizey, sizez),
+                new THREE.MeshBasicMaterial({color: color})
+            )
+            cube.geometry.computeBoundingBox()
+
+            state.loaded = true
+            state.mesh = cube
+            cube.esComponent = self
+            resolveLoadCallbackCache()
+        },
         loadParametrized: (path, x = 0, y = 0, z = 0, rotX = 0, rotY = 0, rotZ = 0, parent = null) => {
             return new Promise((resolve, reject) => {
                 self.load(path).then(() => {
@@ -25,7 +52,8 @@ export const ThreejsComponentConstructor = (name) => {
                         parent.add(state.mesh)
                     }
                     resolve()
-                }, reject)
+                    resolveLoadCallbackCache()
+                }, () => { reject(); resolveLoadCallbackCache() })
             })
         },
         load: (path) => {
@@ -56,9 +84,10 @@ export const ThreejsComponentConstructor = (name) => {
                         } else {
                             reject('Unable to find mesh child')
                         }
+                        resolveLoadCallbackCache()
 
-                    }, reject)
-                }, reject)
+                    }, () => { reject(); resolveLoadCallbackCache() })
+                }, () => { reject(); resolveLoadCallbackCache() })
             })
         }
     }
