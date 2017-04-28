@@ -1,26 +1,22 @@
-export const entityGetName = (name) => ({
+export const entityGetName = (state) => ({
     /** @returns {String} */
-    get name() { return name }
+    get name() { return state.name }
 })
 
-/**
- * @param {Map} components
- * @param {Array} children
- */
-export const entityUpdate = (components, children) => ({
+export const entityUpdate = (state) => ({
     /**
      * Perform update cycle of an entity:
      * Update all components in current entity
      * Update all containing entities
      */
     update: () => {
-        components.forEach(comp => {
+        state.components.forEach(comp => {
             if ('update' in comp) {
                 comp.update()
             }
         })
 
-        children.forEach(child => {
+        state.children.forEach(child => {
             if ('update' in child) {
                 child.update()
             }
@@ -28,40 +24,33 @@ export const entityUpdate = (components, children) => ({
     }
 })
 
-/** @param {Array} children */
-export const entityAddChild = (children) => ({
+export const entityAddChild = (state) => ({
     /**
      * Add child entity
      * @param {*} value
      */
     addChild: (value) => {
-        children.push(value)
+        state.children.push(value)
     }
 })
 
-/** @param {Array} children */
-export const entityGetAnyChildren = (children) => ({
+export const entityGetAnyChildren = (state) => ({
     /**
      * Does current entity contains any child entities
      * @returns {boolean}
      */
-    anyChildren: () => { return children.length > 0 }
+    anyChildren: () => { return state.children.length > 0 }
 })
 
-/** @param {Array} children */
-export const entityGetChildren = (children) => ({
+export const entityGetChildren = (state) => ({
     /**
      * Get the list of current entities children
      * @returns {Array}
      */
-    getChildren: () => { return children }
+    getChildren: () => { return state.children }
 })
 
-/**
- * @param {*} self
- * @param {Map} components
- */
-export const entityAddComponent = (self, components) => ({
+export const entityAddComponent = (self, state) => ({
     /**
      * Add Component to current entity
      * @param {string} key
@@ -69,18 +58,17 @@ export const entityAddComponent = (self, components) => ({
      * @returns {*} value
      */
     addComponent: (key, value) => {
-        value.injectOwner(self)
-        components.set(key, value)
-        return value
+        value.injectOwner(self)             // inject parent entity in the target component
+        state.components.set(key, value)    // add target component to entity component map
+        return value                        // return component for convenience
     }
 })
 
-/** @param {Map} components */
-export const entityGetComponent = (components) => ({
+export const entityGetComponent = (state) => ({
     /**
-     * Get Component of current entity
+     * Get component of current entity
      * @param key
      * @returns {*} component
      */
-    getComponent: (key) => { return components.get(key) }
+    getComponent: (key) => { return state.components.get(key) }
 })

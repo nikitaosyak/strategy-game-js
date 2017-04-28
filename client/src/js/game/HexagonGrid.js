@@ -27,28 +27,33 @@ const GridUtils = (template) => {
 export const HexagonGridConstructor = (template) => {
 	let f = window.facade
 
-	const _state = {
-	    utils: GridUtils(template),
-		template: template,
-        gridRoot: new THREE.Object3D(),
-		grid: []
+	const state = {
+	    //
+        // Entity state
+	    name: 'HexagonalGrid',
+	    components: new Map(),
+	    children: [],
+
+        //
+        // Custom state
+        template: template,
+        utils: GridUtils(template),
+        gridRoot: new THREE.Object3D()
 	}
 
     const self = {
-        get radius() { return radius },
-        get children() { return _state.gridRoot.children },
-        get utils() { return _state.utils },
-        rotate: (angleRad) => _state.gridRoot.rotation.y += angleRad,
-        setAngle: (angleRad) => _state.gridRoot.rotation.y = angleRad
+        get utils() { return state.utils },
+        rotate: (angleRad) => state.gridRoot.rotation.y += angleRad,
+        setAngle: (angleRad) => state.gridRoot.rotation.y = angleRad
     }
 
-    Object.assign(self, entityGetName('HexagonGrid'))
-    Object.assign(self, entityUpdate(new Map(), _state.grid))
-    Object.assign(self, entityAddChild(_state.grid))
-    Object.assign(self, entityGetAnyChildren(_state.grid))
-    Object.assign(self, entityGetChildren(_state.grid))
+    Object.assign(self, entityGetName(state))
+    Object.assign(self, entityUpdate(state))
+    Object.assign(self, entityAddChild(state))
+    Object.assign(self, entityGetAnyChildren(state))
+    Object.assign(self, entityGetChildren(state))
 
-	f.renderer.addObject(_state.gridRoot)
+	f.renderer.addToScene(state.gridRoot)
 
     const facetWidth = 1 + template.meta.tileGap * 2
     const facetRadius = (facetWidth/2)/Math.sin(CONST.HEX_ANGLE_DEG * CONST.MATH.DEG_TO_RAD)
@@ -56,28 +61,25 @@ export const HexagonGridConstructor = (template) => {
     const rowOffset = facetRadius + capHeight
     const calculatedHeight = rowOffset * (template.meta.height-1)
 
-	const radius = facetWidth / (2 * Math.tan(Math.PI / template.meta.width))
-    f.renderer.camera.position.x = 23
-    f.renderer.camera.position.y = 0
-    f.renderer.camera.lookAt({x:0, y: 0, z:0})
+	const gridRadius = facetWidth / (2 * Math.tan(Math.PI / template.meta.width))
 
     let centerY = calculatedHeight / 2
 
     for (let i = 0; i < template.layout.length; i++) {
 	    const row = Math.floor(i/template.meta.width)
-        const travelAngleRad = _state.utils.angleFromIndex(i)
+        const travelAngleRad = state.utils.angleFromIndex(i)
 
-        const x = radius * Math.cos(travelAngleRad)
+        const x = gridRadius * Math.cos(travelAngleRad)
         const y = centerY - row * rowOffset
-        const z = radius * Math.sin(travelAngleRad)
+        const z = gridRadius * Math.sin(travelAngleRad)
         const rotY = Math.PI/2 - travelAngleRad
 
-        const hexEntity = EntityConstructor('entity_hex' + i)
-        self.addChild(hexEntity)
+        const hexagon = EntityConstructor('Hexagon' + i)
+        self.addChild(hexagon)
 
-        const logic = hexEntity.addComponent('logic', HexagonConstructor('logic_hex' + i, i, template.layout[i]))
-        const visual = hexEntity.addComponent('visual', ThreejsComponentConstructor('visual_hex' + i))
-        visual.loadParametrized('assets/models/hex_test', x, y, z, 0, rotY, 0, _state.gridRoot).then(logic.init)
+        const logic = hexagon.addComponent('logic', HexagonConstructor('logicHexagon' + i, i, template.layout[i]))
+        const visual = hexagon.addComponent('visual', ThreejsComponentConstructor('visualHexagon' + i))
+        visual.loadParametrized('assets/models/hex_test', x, y, z, 0, rotY, 0, state.gridRoot).then(logic.init)
     }
 
     return self

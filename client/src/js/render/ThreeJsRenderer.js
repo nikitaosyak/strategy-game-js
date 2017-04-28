@@ -3,8 +3,12 @@ export const ThreeJsRendererConstructor = () => {
     let _canvasW = window.innerWidth, _canvasH = window.innerHeight
 
     const _scene = new THREE.Scene()
+
     const _camera = new THREE.PerspectiveCamera(16, _canvasW/_canvasH, 1, 1000)
-    // const _camera = new THREE.OrthographicCamera( _canvasW / - 2, _canvasW / 2, _canvasH / 2, _canvasH / - 2, 1, 1000 );
+    _camera.position.x = 23
+    _camera.position.y = 0
+    _camera.lookAt({x:0, y: 0, z:0})
+
     const _renderer = new THREE.WebGLRenderer()
     _renderer.setSize(_canvasW, _canvasH)
     _renderer.setClearColor(0x090040)
@@ -29,15 +33,14 @@ export const ThreeJsRendererConstructor = () => {
 
         update: () => _renderer.render(_scene, _camera),
 
-        getObjectByName: (name) => _scene.getObjectByName(name),
-        addObject: (value) => _scene.add(value),
+        addToScene: (value) => _scene.add(value),
         addBox: (x, y, z, color, name) => {
             const m = new THREE.Mesh(
                 new THREE.BoxGeometry(x, y, z),
                 new THREE.MeshBasicMaterial({color: color})
             )
             m.name = name
-            self.addObject(m)
+            self.addToScene(m)
         }
     }
     return self
