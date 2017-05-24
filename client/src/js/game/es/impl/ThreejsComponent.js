@@ -18,15 +18,7 @@ export const ThreejsComponentConstructor = (name) => {
     const self = {
         get isLoaded() { return state.loaded },
         get mesh() {return state.mesh},
-        queryLoadDone() {
-            return new Promise((resolve, _) => {
-                if (self.isLoaded) {
-                    resolve()
-                } else {
-                    loadCallbackCache.push(resolve)
-                }
-            })
-        },
+        queryLoadDone: () => promiseLoad,
         debugCube: (sizex, sizey, sizez, color) => {
             const cube = new THREE.Mesh(
                 new THREE.BoxGeometry(sizex, sizey, sizez),
@@ -68,7 +60,6 @@ export const ThreejsComponentConstructor = (name) => {
                             if (child instanceof THREE.Mesh) {
                                 state.loaded = true
                                 state.mesh = child
-                                state.mesh.esComponent = self
                                 child.material = new THREE.MeshPhongMaterial(
                                     {
                                         color: 0xff00ff,
@@ -91,6 +82,14 @@ export const ThreejsComponentConstructor = (name) => {
             })
         }
     }
+
+    const promiseLoad = new Promise((resolve, _) => {
+        if (self.isLoaded) {
+            resolve()
+        } else {
+            loadCallbackCache.push(resolve)
+        }
+    })
 
     Object.assign(self, componentGetName(state))
     Object.assign(self, componentInjectOwner(state))

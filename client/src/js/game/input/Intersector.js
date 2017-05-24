@@ -1,21 +1,30 @@
-import {intersectSelectionTest} from "../../util/behaviours";
-
 export const IntersectorConstructor = (camera) => {
 
-    const _state = {
-        selected: null,
-        camera: camera
-    }
+    let selected = -1
 
-    const self = {
+    const raycaster = new THREE.Raycaster()
+    const vectorPointer = new THREE.Vector2()
+
+    return {
         /** @returns {boolean} */
-        get anySelected() { return _state.selected !== null },
-        /** @returns {*} selected component or null */
-        get selection() { return _state.selected },
+        get anySelected() { return selected > -1 },
+        /** @returns {Number} selected component index or -1 */
+        get selection() { return selected },
 
-        update: () => { _state.selected = null }
+        update: () => { },
+
+        test: (objects, pointer, domElement) => {
+            vectorPointer.x = (pointer.x / domElement.width) * 2 - 1
+            vectorPointer.y = -(pointer.y / domElement.height) * 2 + 1
+
+            raycaster.setFromCamera(vectorPointer, camera)
+
+            const result = raycaster.intersectObjects(objects, false)
+            if (result.length > 0) {
+                selected = result[0].injectedHexagonIndex
+            } else {
+                selected = -1
+            }
+        }
     }
-
-    Object.assign(self, intersectSelectionTest(_state))
-    return self
 }

@@ -16,6 +16,15 @@ export const HexagonComponentConstructor = (name, index, template) => {
 
     const self = {
         get index() { return state.index },
+        get debugTemplate() {
+            switch (state.template) {
+                case 0: return 'PLAIN'
+                case 1: return 'START'
+                case 10: return 'RESOURCE'
+                case 20: return 'WALL'
+                default: return 'UNKNOWN'
+            }
+        },
         init: () => {
             const visual = self.getNeighbour('visual')
 

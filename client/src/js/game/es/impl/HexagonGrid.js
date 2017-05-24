@@ -1,6 +1,6 @@
 import {HexagonComponentConstructor} from './HexagonComponent'
 import {
-    entityAddChild, entityGetAnyChildren, entityGetChild, entityGetName,
+    entityAddChild, entityChildCount, entityGetChild, entityGetName,
     entityUpdate
 } from "../entityBehaviours";
 import {EntityConstructor} from "../Entity";
@@ -44,6 +44,7 @@ export const HexagonGridConstructor = (template) => {
 
     const self = {
         get utils() { return state.utils },
+        get children() { return state.children },
         rotate: (angleRad) => { state.gridRoot.rotation.y += angleRad },
         setAngle: (angleRad) => { state.gridRoot.rotation.y = angleRad }
     }
@@ -52,7 +53,7 @@ export const HexagonGridConstructor = (template) => {
     Object.assign(self, entityUpdate(state))
     Object.assign(self, entityAddChild(state))
     Object.assign(self, entityGetChild(state))
-    Object.assign(self, entityGetAnyChildren(state))
+    Object.assign(self, entityChildCount(state))
 
 	f.renderer.addToScene(state.gridRoot)
 

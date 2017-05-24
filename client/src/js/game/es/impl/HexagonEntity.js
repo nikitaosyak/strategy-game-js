@@ -1,9 +1,7 @@
 import {
-    entityAddComponent, entityGetAnyChildren, entityGetComponent, entityGetName,
+    entityAddComponent, entityChildCount, entityGetChild, entityGetComponent, entityGetName,
     entityUpdate
 } from "../entityBehaviours";
-import {CONST} from "../../../util/const";
-
 
 export const HexagonEntity = (name) => {
 
@@ -62,12 +60,28 @@ export const HexagonEntity = (name) => {
                 repositionChildren()
             })
             state.children.splice(index, 1)
+        },
+
+        //
+        // tree.js raycast helper
+        raycast(raycaster, intersects) {
+            cacheVisual()
+            const beforeCast = intersects.length
+            visual.mesh.raycast(raycaster, intersects)
+
+            //
+            // inject self index to intersect object to determine mesh linking
+            const afterCast = intersects.length
+            if (afterCast > beforeCast) {
+                intersects[afterCast - 1].injectedHexagonIndex = self.getComponent('logic').index
+            }
         }
     }
 
     Object.assign(self, entityGetName(state))
     Object.assign(self, entityUpdate(state))
-    Object.assign(self, entityGetAnyChildren(state))
+    Object.assign(self, entityChildCount(state))
+    Object.assign(self, entityGetChild(state))
     Object.assign(self, entityAddComponent(self, state))
     Object.assign(self, entityGetComponent(state))
 

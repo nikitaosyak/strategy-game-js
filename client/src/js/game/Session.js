@@ -4,7 +4,6 @@ import {HexagonGridConstructor} from './es/impl/HexagonGrid'
 import {InputConstructor, Input} from "./input/Input";
 import {Commands} from "./command/Commands";
 import {ESConstructor} from "./es/ES";
-import {CONST} from "../util/const";
 
 export const SessionConstructor = (rawSessionData) => {
     let f = window.facade
@@ -27,15 +26,27 @@ export const SessionConstructor = (rawSessionData) => {
             grid.rotate(Math.atan2(projVector.x, 0.5))
         }
         if (input.pointer.lastClick.click) {
-            // console.time('intersection')
             input.intersector.test(grid.children, input.pointer.lastClick, f.renderer.domObject)
-            // console.timeEnd('intersection')
             if (input.intersector.anySelected) {
-                const selectedComponent = input.intersector.selection
-                const hexIndex = selectedComponent.getNeighbour('logic').index
-                const p = selectedComponent.mesh.position
-                console.log(hexIndex, Math.atan2(p.z, p.x) * CONST.MATH.RAD_TO_DEG,
-                    grid.utils.angleFromIndex(hexIndex) * CONST.MATH.RAD_TO_DEG)
+                const hexIndex = input.intersector.selection
+                const comp = grid.getChild(hexIndex)
+                const logic = comp.getComponent('logic')
+                if (comp.getChildCount() > 0) {
+                    let childrenStr = '['
+                    for (let i = 0; i < comp.getChildCount(); i++) {
+                        const child = comp.getChild(i)
+                        childrenStr += child.name + ':' + child.type + '(' + child.possessor + ')'
+                        if (i < comp.getChildCount()-1) {
+                            childrenStr += ', '
+                        }
+                    }
+                    childrenStr += ']'
+                    console.info('#%i; %s; contains: %s',
+                        hexIndex, logic.debugTemplate, childrenStr)
+                } else {
+                    console.info('#%i; %s; EMPTY ',
+                        hexIndex, logic.debugTemplate)
+                }
             }
         }
         input.update() // update will nullify dx
@@ -131,18 +142,18 @@ export const SessionConstructor = (rawSessionData) => {
                     .add()
                     .cmd('create', 'unit', 'human', 'петя')
                     .data('location', myStartLocation-1)
-                cmd.serializer
-                    .add()
-                    .cmd('create', 'unit', 'ork', 'димон')
-                    .data('location', myStartLocation-1)
-                cmd.serializer
-                    .add()
-                    .cmd('create', 'unit', 'human', 'серега')
-                    .data('location', myStartLocation-1)
-                cmd.serializer
-                    .add()
-                    .cmd('create', 'unit', 'ork', 'фандорин')
-                    .data('location', myStartLocation-1)
+                // cmd.serializer
+                //     .add()
+                //     .cmd('create', 'unit', 'ork', 'димон')
+                //     .data('location', myStartLocation-1)
+                // cmd.serializer
+                //     .add()
+                //     .cmd('create', 'unit', 'human', 'серега')
+                //     .data('location', myStartLocation-1)
+                // cmd.serializer
+                //     .add()
+                //     .cmd('create', 'unit', 'ork', 'фандорин')
+                //     .data('location', myStartLocation-1)
                 cmd.performLocal()
 
                 _gameUpdater()

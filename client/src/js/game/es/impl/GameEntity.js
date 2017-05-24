@@ -1,6 +1,5 @@
 import {
     entityAddComponent,
-    entityGetAnyChildren,
     entityGetComponent,
     entityGetName,
     entityUpdate
@@ -35,8 +34,6 @@ export const GameEntityConstructor = (name, type, possessor) => {
 
     Object.assign(self, entityGetName(state))
     Object.assign(self, entityUpdate(state))
-
-    Object.assign(self, entityGetAnyChildren(state))
 
     Object.assign(self, entityAddComponent(self, state))
     Object.assign(self, entityGetComponent(state))

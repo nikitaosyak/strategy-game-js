@@ -57,12 +57,12 @@ export const entityRemoveChild = (state) => ({
     removeChild: (index) => state.children.splice(index, 1)
 })
 
-export const entityGetAnyChildren = (state) => ({
+export const entityChildCount = (state) => ({
     /**
-     * Does current entity contains any child entities
-     * @returns {boolean}
+     * Number of children current entity contains
+     * @returns {Number}
      */
-    anyChildren: () => { return state.children && state.children.length > 0 }
+    getChildCount: () => { return state.children ? state.children.length : 0 }
 })
 
 export const entityAddComponent = (self, state) => ({
