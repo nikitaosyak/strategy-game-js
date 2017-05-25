@@ -6,15 +6,54 @@ base(zIndex = 1)
 body
   margin 0 auto
 
+#uiRoot
+  position fixed
+  width 100%
+  height 100%
+  left: 0
+  top: 0
+  z-index 1
+  pointer-events none
+
+#uiStats
+  base()
+  top 0; left 0
+  opacity 0.5
+
 #gameCanvas
   base(0)
   display block
 
-#fullScreenButton
+#uiTurnPanel
+  base()
+  top 0
+  right 5%
+  left 5%
+  height 1%
+  background red
+  opacity 0.3
+  pointer-events none
+
+#uiFullScreenPanel
   base()
   right 1%
   bottom 1%
-  border none
-  background url('./assets/ui/fullscreen.png') no-repeat
   width: 100px
   height 100px
+  pointer-events none
+
+#uiFullScreenBtnExpand
+  width 100%
+  height 100%
+  margin 0 auto
+  border none
+  background url('./assets/ui/fullscreen.png') no-repeat
+  pointer-events all
+
+#uiFullScreenBtnCollapse
+  width 100%
+  height 100%
+  margin 0 auto
+  border none
+  background url('./assets/ui/fullscreen.png') no-repeat
+  pointer-events all
