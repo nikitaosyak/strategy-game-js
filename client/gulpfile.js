@@ -40,6 +40,13 @@ gulp.task('pack', ['clean'], () => {
         .pipe(gulp.dest('build/'))
 })
 
+gulp.task('pack-css', ['clean'], () => {
+    const cssPreprocessor = require('gulp-css-preprocessor')
+    gulp.src('src/css/*.styl')
+        .pipe(cssPreprocessor())
+        .pipe(gulp.dest('build/'))
+})
+
 gulp.task('deploy-static', ['clean'], () => {
     gulp.src('src/lib/**/*.js').pipe(gulp.dest('build/lib/'))
 
@@ -50,7 +57,7 @@ gulp.task('deploy-static', ['clean'], () => {
         .pipe(gulp.dest('build/assets'))
 })
 
-gulp.task('deploy', ['clean', 'pack', 'deploy-static'], () => {
+gulp.task('deploy', ['clean', 'pack', 'pack-css', 'deploy-static'], () => {
     gulp.src(['src/**/*']).pipe(connect.reload());
 });
 
