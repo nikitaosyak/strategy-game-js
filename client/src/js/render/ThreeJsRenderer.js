@@ -9,10 +9,11 @@ export const ThreeJsRendererConstructor = () => {
     _camera.position.y = 0
     _camera.lookAt({x:0, y: 0, z:0})
 
-    const _renderer = new THREE.WebGLRenderer()
+    const _renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('gameCanvas')
+    })
     _renderer.setSize(_canvasW, _canvasH)
-    _renderer.setClearColor(0x090040)
-    _renderer.domElement.style.display = 'block'
+    _renderer.setClearColor(0xF5F5CC)
     document.body.appendChild(_renderer.domElement)
 
     _scene.add(new THREE.AmbientLight(0x404040, 1.5))

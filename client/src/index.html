@@ -1,19 +1,25 @@
 <!doctype html> 
 <html lang="en"> 
-<head> 
+
+<head>
     <meta charset="UTF-8" />
     <title>thirst</title>
 
+<link rel="stylesheet" type="text/css" href="styles.css">
 <script src="lib/three.js"></script>
 <script src="lib/threeOBJLoader.js"></script>
 </head>
-<body style="padding: 0; margin: 0;">
+
+<body>
 
 <script src="bundle.js"></script>
 
 <script>
 (function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';document.head.appendChild(script);})()
 </script>
+<canvas id="gameCanvas"></canvas>
+
+<button id="fullScreenButton"></button>
 
 </body>
 </html>
