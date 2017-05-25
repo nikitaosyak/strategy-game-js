@@ -2,7 +2,7 @@ import {FacadeConstructor} from './Facade'
 import {SessionConstructor} from './game/Session'
 
 window.onload = () => {
-    const f = window.facade = FacadeConstructor()
+    const f = FacadeConstructor()
 
     f.connection.connect().then(
         () => {
@@ -12,13 +12,11 @@ window.onload = () => {
                 console.warn('uplink not possible. starting OFFLINE mode')
             }
             f.connection.enqueue().then(
-                SessionConstructor,
-                () => {
-                    throw 'Retry queue not Implemented'
-                })
+                (sessionData) => SessionConstructor(f, sessionData),
+                () => { throw 'Retry queue not Implemented' })
         },
         () => {
             console.info('uplink not possible. starting OFFLINE mode')
-            SessionConstructor({session_token:'DEADBEEF', users:['DEADBEEF']})
+            SessionConstructor(f, {session_token:'DEADBEEF', users:['DEADBEEF']})
         })
 }

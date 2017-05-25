@@ -53,9 +53,9 @@ export const ThreejsComponentConstructor = (name) => {
                 const meshPath = path + '.obj'
                 const texturePath = path + '_tex.png'
 
-                const f = window.facade
-                f.resourceLoader.load(texturePath).then((texture) => {
-                    f.resourceLoader.load(meshPath).then((obj) => {
+                const resourceLoader = window.resourceLoader
+                resourceLoader.load(texturePath).then((texture) => {
+                    resourceLoader.load(meshPath).then((obj) => {
                         obj.traverse(child => {
                             if (child instanceof THREE.Mesh) {
                                 state.loaded = true

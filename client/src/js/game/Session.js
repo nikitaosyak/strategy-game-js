@@ -5,22 +5,26 @@ import {InputConstructor, Input} from "./input/Input";
 import {Commands} from "./command/Commands";
 import {ESConstructor} from "./es/ES";
 
-export const SessionConstructor = (rawSessionData) => {
-    let f = window.facade
+export const SessionConstructor = (facade, rawSessionData) => {
+    const f = facade
 
     const data = SessionDataConstructor()
     const input = InputConstructor(f.renderer.domObject, f.renderer.camera)
-    const es = ESConstructor(null, f.renderer.update)
+    const es = ESConstructor(null, null)
 
     let baseLocation = Number.NaN
     let model = null
     let grid = null
     let cmd = null
 
+    /**
+     * main game loop
+     * @private
+     */
     const _gameUpdater = () => {
         requestAnimationFrame(_gameUpdater)
 
-        // check input
+        // TODO: move this
         if (input.pointer.target === Input.SessionInputTarget.CANVAS && input.pointer.wasMove) {
             const projVector = new THREE.Vector3(((input.pointer.dx + window.innerWidth/2)/window.innerWidth) * 2 - 1, 0, 0.5)
             grid.rotate(Math.atan2(projVector.x, 0.5))
@@ -49,12 +53,11 @@ export const SessionConstructor = (rawSessionData) => {
                 }
             }
         }
-        input.update() // update will nullify dx
-
-        // check uplink
-
-        // update game logic
+        input.update()
+        // TODO: check uplink here
         es.update()
+        f.ui.update()
+        f.renderer.update()
     }
 
     const _gameTurn = () => {
@@ -90,6 +93,7 @@ export const SessionConstructor = (rawSessionData) => {
                 //
                 // create visual grid
                 grid = HexagonGridConstructor(mapData)
+                f.renderer.addToScene(grid.visualRoot)
                 es.add('grid', grid)
                 cmd = Commands(f.connection, data, grid)
 
