@@ -11,8 +11,6 @@ export const IntersectorConstructor = (camera) => {
         /** @returns {Number} selected component index or -1 */
         get selection() { return selected },
 
-        update: () => { },
-
         test: (objects, pointer, domElement) => {
             vectorPointer.x = (pointer.x / domElement.width) * 2 - 1
             vectorPointer.y = -(pointer.y / domElement.height) * 2 + 1

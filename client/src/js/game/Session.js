@@ -9,10 +9,10 @@ export const SessionConstructor = (facade, rawSessionData) => {
     const f = facade
 
     const data = SessionDataConstructor()
-    const input = InputConstructor(f.renderer.domObject, f.renderer.camera)
     const es = ESConstructor(null, null)
 
     let baseLocation = Number.NaN
+    let input = null
     let model = null
     let grid = null
     let cmd = null
@@ -24,39 +24,11 @@ export const SessionConstructor = (facade, rawSessionData) => {
     const _gameUpdater = () => {
         requestAnimationFrame(_gameUpdater)
 
-        // TODO: move this
-        if (input.pointer.target === Input.SessionInputTarget.CANVAS && input.pointer.wasMove) {
-            const projVector = new THREE.Vector3(((input.pointer.dx + window.innerWidth/2)/window.innerWidth) * 2 - 1, 0, 0.5)
-            grid.rotate(Math.atan2(projVector.x, 0.5))
-        }
-        if (input.pointer.lastClick.click) {
-            input.intersector.test(grid.children, input.pointer.lastClick, f.renderer.domObject)
-            if (input.intersector.anySelected) {
-                const hexIndex = input.intersector.selection
-                const comp = grid.getChild(hexIndex)
-                const logic = comp.getComponent('logic')
-                if (comp.getChildCount() > 0) {
-                    let childrenStr = '['
-                    for (let i = 0; i < comp.getChildCount(); i++) {
-                        const child = comp.getChild(i)
-                        childrenStr += child.name + ':' + child.type + '(' + child.possessor + ')'
-                        if (i < comp.getChildCount()-1) {
-                            childrenStr += ', '
-                        }
-                    }
-                    childrenStr += ']'
-                    console.info('#%i; %s; contains: %s',
-                        hexIndex, logic.debugTemplate, childrenStr)
-                } else {
-                    console.info('#%i; %s; EMPTY ',
-                        hexIndex, logic.debugTemplate)
-                }
-            }
-        }
+        f.ui.update()
         input.update()
+
         // TODO: check uplink here
         es.update()
-        f.ui.update()
         f.renderer.update()
     }
 
@@ -91,8 +63,9 @@ export const SessionConstructor = (facade, rawSessionData) => {
             f.resourceLoader.load('assets/map_11_6.json').then((mapData) => {
 
                 //
-                // create visual grid
+                // initialize services and dependencies
                 grid = HexagonGridConstructor(mapData)
+                input = InputConstructor(grid, f.renderer.domObject, f.renderer.camera)
                 f.renderer.addToScene(grid.visualRoot)
                 es.add('grid', grid)
                 cmd = Commands(f.connection, data, grid)

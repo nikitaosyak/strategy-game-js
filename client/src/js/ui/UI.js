@@ -1,6 +1,6 @@
-import {StatsConstructor} from "./Stats";
-import {FullScreenBtnControllerConstructor} from "./buttons/fullscreenBtnController";
-import {TurnPanelControllerConstructor} from "./buttons/turnPanelController";
+import {StatsConstructor} from "./panels/Stats";
+import {FullScreenPanelControllerConstructor} from "./panels/FullscreenPanelController";
+import {TurnPanelControllerConstructor} from "./panels/TurnPanelController";
 
 export const UIUtils = {
     /**
@@ -23,17 +23,21 @@ export const UIUtils = {
 
 export const UIConstructor = () => {
 
+    const gameCanvas = UIUtils.createElement('canvas', 'gameCanvas', document.body)
+
     const root = UIUtils.createElement('div', 'uiRoot', document.body)
 
     //
     // create main ui blocks
-    const stats = StatsConstructor()
-    const fullscreenBtn = FullScreenBtnControllerConstructor(root)
+    const stats = StatsConstructor(root)
+    const fullscreenBtn = FullScreenPanelControllerConstructor(root)
     const turnPanel = TurnPanelControllerConstructor(root)
+
+    const uiComponents = [stats, fullscreenBtn, turnPanel]
 
     return {
         update: () => {
-            stats.update()
+            uiComponents.forEach(comp => comp.update())
         }
     }
 }

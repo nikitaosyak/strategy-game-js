@@ -3,12 +3,12 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-export const StatsConstructor = () => {
+export const StatsConstructor = (parent) => {
 
     let mode = 0;
 
     const container = document.createElement('div');
-    document.body.appendChild(container)
+    parent.appendChild(container)
     container.id = 'uiStats'
 
     //
