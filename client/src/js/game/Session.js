@@ -14,7 +14,7 @@ export const SessionConstructor = (connection, rawSessionData) => {
 
     const data = SessionDataConstructor()
     const es = ESConstructor(null, null)
-    const renderer = ThreeJsRendererConstructor(ui.canvas)
+    let renderer = null
 
     let baseLocation = Number.NaN
     let input = null
@@ -69,8 +69,9 @@ export const SessionConstructor = (connection, rawSessionData) => {
                 //
                 // initialize services and dependencies
                 grid = HexagonGridConstructor(mapData)
-                input = CanvasInput(ui, grid, renderer.camera)
+                renderer = ThreeJsRendererConstructor(ui.canvas, grid.calculatedHeight)
                 renderer.addToScene(grid.visualRoot)
+                input = CanvasInput(ui, grid, renderer.camera)
 
                 es.add('grid', grid)
                 cmd = Commands(connection, data, grid)

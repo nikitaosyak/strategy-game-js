@@ -1,11 +1,14 @@
-
-export const ThreeJsRendererConstructor = (canvasDom) => {
+import {CONST} from "../util/const";
+export const ThreeJsRendererConstructor = (canvasDom, gridHeight) => {
     let _canvasW = window.innerWidth, _canvasH = window.innerHeight
 
     const _scene = new THREE.Scene()
 
-    const _camera = new THREE.PerspectiveCamera(16, _canvasW/_canvasH, 1, 1000)
-    _camera.position.x = 23
+    const vFov = 16
+    const _camera = new THREE.PerspectiveCamera(vFov, _canvasW/_canvasH, 1, 1000)
+    const alpha = CONST.MATH.DEG_TO_RAD * (90 - vFov/2)
+    console.log(gridHeight/2 * Math.tan(alpha))
+    _camera.position.x = gridHeight/2 * Math.tan(alpha)
     _camera.position.y = 0
     _camera.lookAt({x:0, y: 0, z:0})
 

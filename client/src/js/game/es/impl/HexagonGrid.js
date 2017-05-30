@@ -41,7 +41,11 @@ export const HexagonGridConstructor = (template) => {
         root: new THREE.Object3D()
 	}
 
+    let calculatedHeight = 0
+    let calculatedHeight2 = 0
+
     const self = {
+	    get calculatedHeight() { return calculatedHeight2 },
 	    get visualRoot() { return state.root },
         get utils() { return state.utils },
         get children() { return state.children },
@@ -59,7 +63,8 @@ export const HexagonGridConstructor = (template) => {
     const facetRadius = (facetWidth/2)/Math.sin(CONST.HEX_ANGLE_DEG * CONST.MATH.DEG_TO_RAD)
     const capHeight = facetRadius * Math.cos(CONST.HEX_ANGLE_DEG * CONST.MATH.DEG_TO_RAD)
     const rowOffset = facetRadius + capHeight
-    const calculatedHeight = rowOffset * (template.meta.height-1)
+    calculatedHeight = rowOffset * (template.meta.height-1)
+    calculatedHeight2 = rowOffset * template.meta.height + capHeight*2
 
 	const gridRadius = facetWidth / (2 * Math.tan(Math.PI / template.meta.width))
 
