@@ -1,5 +1,5 @@
 
-export const ThreeJsRendererConstructor = () => {
+export const ThreeJsRendererConstructor = (canvasDom) => {
     let _canvasW = window.innerWidth, _canvasH = window.innerHeight
 
     const _scene = new THREE.Scene()
@@ -10,11 +10,10 @@ export const ThreeJsRendererConstructor = () => {
     _camera.lookAt({x:0, y: 0, z:0})
 
     const _renderer = new THREE.WebGLRenderer({
-        canvas: document.getElementById('gameCanvas')
+        canvas: canvasDom
     })
     _renderer.setSize(_canvasW, _canvasH)
     _renderer.setClearColor(0xF5F5CC)
-    document.body.appendChild(_renderer.domElement)
 
     _scene.add(new THREE.AmbientLight(0x404040, 1.5))
 
@@ -30,7 +29,6 @@ export const ThreeJsRendererConstructor = () => {
 
     const self = {
         get camera() { return _camera },
-        get domObject() { return _renderer.domElement },
 
         update: () => _renderer.render(_scene, _camera),
 

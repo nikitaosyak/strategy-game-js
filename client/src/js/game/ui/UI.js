@@ -1,34 +1,12 @@
+/**
+ * @constructor
+ */
 import {StatsConstructor} from "./panels/Stats";
 import {FullScreenPanelControllerConstructor} from "./panels/FullscreenPanelController";
 import {TurnPanelControllerConstructor} from "./panels/TurnPanelController";
 import {CommandPanelControllerConstructor} from "./panels/CommandPanelController";
 import {TileInfoPanelControllerConstructor} from "./panels/TileInfoPanelController";
-
-export const UIUtils = {
-    /**
-     * @param {string} tag
-     * @param {string} id
-     * @param {Element} parent
-     * @param {*} styleParams
-     * @return {Element}
-     */
-    createElement: (tag, id, parent = null, styleParams = null) => {
-        const el = document.createElement(tag)
-        el.id = id
-        if (parent === null || parent === undefined) {
-            document.getElementById('uiRoot').appendChild(el)
-        } else {
-            parent.appendChild(el)
-        }
-
-        if (styleParams !== null && styleParams !== undefined) {
-            for (const key in styleParams) {
-                el.style[key] = styleParams[key]
-            }
-        }
-        return el
-    }
-}
+import {UIUtils} from "./UIUtils";
 
 export const UIConstructor = () => {
 
@@ -36,17 +14,32 @@ export const UIConstructor = () => {
 
     const root = UIUtils.createElement('div', 'uiRoot', document.body)
 
+    const ownerProxy = {
+        root: root,
+        es: null,
+        cmd: null
+    }
+
     //
     // create main ui blocks
     const stats = StatsConstructor(root)
     const fullscreenBtn = FullScreenPanelControllerConstructor(root)
     const turnPanel = TurnPanelControllerConstructor(root)
-    const commandPanel = CommandPanelControllerConstructor(root)
-    const tileInfoPanel = TileInfoPanelControllerConstructor(root)
+    const commandPanel = CommandPanelControllerConstructor(ownerProxy)
+    const tileInfoPanel = TileInfoPanelControllerConstructor(ownerProxy)
 
     const uiComponents = [stats, fullscreenBtn, turnPanel, commandPanel, tileInfoPanel]
 
     return {
+        inject: (es, commands) => {
+            ownerProxy.es = es
+            ownerProxy.cmd = commands
+        },
+        /** @return {Element} */
+        get root() { return root },
+        /** @return {Element} */
+        get canvas() { return gameCanvas },
+        /** update all UI panels */
         update: () => {
             uiComponents.forEach(comp => {
                 if ('update' in comp) {

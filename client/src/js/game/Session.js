@@ -1,15 +1,20 @@
 import {GameModelConstructor} from './GameModel'
 import {SessionDataConstructor} from './SessionData'
 import {HexagonGridConstructor} from './es/impl/HexagonGrid'
-import {InputConstructor, Input} from "./input/Input";
+import {CanvasInput} from "./input/CanvasInput";
 import {Commands} from "./command/Commands";
 import {ESConstructor} from "./es/ES";
+import {UIConstructor} from "./ui/UI";
+import {ThreeJsRendererConstructor} from "./ThreeJsRenderer";
 
-export const SessionConstructor = (facade, rawSessionData) => {
-    const f = facade
+export const SessionConstructor = (connection, rawSessionData) => {
+
+    const resourceLoader = window.resourceLoader
+    const ui = UIConstructor()
 
     const data = SessionDataConstructor()
     const es = ESConstructor(null, null)
+    const renderer = ThreeJsRendererConstructor(ui.canvas)
 
     let baseLocation = Number.NaN
     let input = null
@@ -24,16 +29,15 @@ export const SessionConstructor = (facade, rawSessionData) => {
     const _gameUpdater = () => {
         requestAnimationFrame(_gameUpdater)
 
-        f.ui.update()
+        ui.update()
         input.update()
 
-        // TODO: check uplink here
         es.update()
-        f.renderer.update()
+        renderer.update()
     }
 
     const _gameTurn = () => {
-        f.connection.turnHook(data.token, data.turn).then((commands) => {
+        connection.turnHook(data.token, data.turn).then((commands) => {
             cmd.performRemote(commands)
             data.addTurn()
             _gameTurn()
@@ -46,35 +50,37 @@ export const SessionConstructor = (facade, rawSessionData) => {
     //
     // create session data
     data.initialize(
-        f.connection.token, 
+        connection.token,
         rawSessionData.session_token,
         rawSessionData.users
     )
-    // f.connection.traceState()
+    // connection.traceState()
     // data.traceState()
 
-    f.connection.ready(data.token).then(() => {
+    connection.ready(data.token).then(() => {
         //
         // load game params
-        f.resourceLoader.load('assets/game_params.json').then((params) => {
+        resourceLoader.load('assets/game_params.json').then((params) => {
             //
             // create game model
             model = GameModelConstructor(params)
-            f.resourceLoader.load('assets/map_11_6.json').then((mapData) => {
+            resourceLoader.load('assets/map_11_6.json').then((mapData) => {
 
                 //
                 // initialize services and dependencies
                 grid = HexagonGridConstructor(mapData)
-                input = InputConstructor(grid, f.renderer.domObject, f.renderer.camera)
-                f.renderer.addToScene(grid.visualRoot)
+                input = CanvasInput(ui, grid, renderer.camera)
+                renderer.addToScene(grid.visualRoot)
+
                 es.add('grid', grid)
-                cmd = Commands(f.connection, data, grid)
+                cmd = Commands(connection, data, grid)
+                ui.inject(es, cmd)
 
                 //
                 // determine self start location (tile-wise)
                 // start location tiles is coded with '1' tile type
                 let myStartLocation = -1
-                if (f.connection.isOnline) {
+                if (connection.isOnline) {
                     let currentPointIndex = 0
                     for (let i = 0; i < mapData.layout.length; i++) {
                         if (mapData.layout[i] !== 1) continue

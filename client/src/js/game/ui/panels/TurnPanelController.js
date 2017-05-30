@@ -1,4 +1,4 @@
-import {UIUtils} from "../UI";
+import {UIUtils} from "../UIUtils";
 
 /**
  * Represents the time left of the current turn

@@ -1,4 +1,4 @@
-import {Input} from "./Input";
+import {Input} from "./CanvasInput";
 
 export const PointerInputConstructor = (canvas) => {
     const _state = {

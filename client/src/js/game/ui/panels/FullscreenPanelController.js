@@ -1,4 +1,4 @@
-import {UIUtils} from "../UI";
+import {UIUtils} from "../UIUtils";
 
 /**
  * Represent full screen toggle buttons

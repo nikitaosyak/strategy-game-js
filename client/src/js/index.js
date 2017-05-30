@@ -1,22 +1,25 @@
-import {FacadeConstructor} from './Facade'
 import {SessionConstructor} from './game/Session'
+import {ConnectionConstructor} from "./Connection";
+import {ResourceLoaderConstructor} from "./util/ResourceLoader";
 
 window.onload = () => {
-    const f = FacadeConstructor()
+    window.resourceLoader = ResourceLoaderConstructor() // don't know how else to inject that without pain
 
-    f.connection.connect().then(
+    const connection = ConnectionConstructor('localhost', 8181)
+
+    connection.connect().then(
         () => {
-            if (f.connection.isOnline) {
-                console.info('uplink established. Token: %s', f.connection.token)
+            if (connection.isOnline) {
+                console.info('uplink established. Token: %s', connection.token)
             } else {
                 console.warn('uplink not possible. starting OFFLINE mode')
             }
-            f.connection.enqueue().then(
-                (sessionData) => SessionConstructor(f, sessionData),
+            connection.enqueue().then(
+                (sessionData) => SessionConstructor(connection, sessionData),
                 () => { throw 'Retry queue not Implemented' })
         },
         () => {
             console.info('uplink not possible. starting OFFLINE mode')
-            SessionConstructor(f, {session_token:'DEADBEEF', users:['DEADBEEF']})
+            SessionConstructor(connection, {session_token:'DEADBEEF', users:['DEADBEEF']})
         })
 }

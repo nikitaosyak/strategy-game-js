@@ -5,9 +5,9 @@ export const Input = {
     SessionInputTarget: { CANVAS: 'canvas' }
 }
 
-export const InputConstructor = (grid, canvasDom, camera) => {
-    const pointer = PointerInputConstructor(canvasDom)
-    const intersector = IntersectorConstructor(camera)
+export const CanvasInput = (ui, grid, threeJSCamera) => {
+    const pointer = PointerInputConstructor(ui.canvas)
+    const intersector = IntersectorConstructor(threeJSCamera)
 
     return {
         update: () => {
@@ -16,7 +16,7 @@ export const InputConstructor = (grid, canvasDom, camera) => {
                 grid.rotate(Math.atan2(projVector.x, 0.5))
             }
             if (pointer.lastClick.click) {
-                intersector.test(grid.children, pointer.lastClick, canvasDom)
+                intersector.test(grid.children, pointer.lastClick, ui.canvas)
                 if (intersector.anySelected) {
                     const hexIndex = intersector.selection
                     const comp = grid.getChild(hexIndex)
