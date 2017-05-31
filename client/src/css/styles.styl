@@ -2,9 +2,17 @@ base(zIndex = 1)
   position absolute
   z-index zIndex
 
-
-body
+divButton()
+  width 100%
+  height 100%
   margin 0 auto
+  border none
+  background-size 100%
+  pointer-events all
+
+html, body
+  margin 0
+  overflow hidden
 
 #uiRoot
   position fixed
@@ -21,8 +29,11 @@ body
   opacity 0.5
 
 #gameCanvas
-  base(0)
-  display block
+  z-index 0
+  width 100%
+  height 100%
+  margin 0
+  pointer-events all
 
 #uiTurnPanel
   base()
@@ -35,23 +46,15 @@ body
 
 #uiFullScreenPanel
   base()
-  right 1%
-  bottom 1%
-  width: 100px
-  height 100px
+  right 1px
+  bottom 1px
+  width: 75px
+  height 75px
 
 #uiFullScreenBtnExpand
-  width 100%
-  height 100%
-  margin 0 auto
-  border none
-  background url('./assets/ui/fullscreen.png') no-repeat
-  pointer-events all
+  background url('./assets/ui/fullscreen_expand.png') no-repeat
+  divButton()
 
 #uiFullScreenBtnCollapse
-  width 100%
-  height 100%
-  margin 0 auto
-  border none
-  background url('./assets/ui/fullscreen.png') no-repeat
-  pointer-events all
+  background url('./assets/ui/fullscreen_collapse.png') no-repeat
+  divButton()

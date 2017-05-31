@@ -9,25 +9,23 @@ import {TileInfoPanelControllerConstructor} from "./panels/TileInfoPanelControll
 import {UIUtils} from "./UIUtils";
 
 export const UIConstructor = () => {
-
     const gameCanvas = UIUtils.createElement('canvas', 'gameCanvas', document.body)
-
-    const root = UIUtils.createElement('div', 'uiRoot', document.body)
+    const uiRoot = UIUtils.createElement('div', 'uiRoot', document.body)
 
     const ownerProxy = {
-        root: root,
+        root: uiRoot,
         es: null,
         cmd: null
     }
 
     //
     // create main ui blocks
-    const stats = StatsConstructor(root)
-    const fullscreenBtn = FullScreenPanelControllerConstructor(root)
-    const turnPanel = TurnPanelControllerConstructor(root)
+    const stats = StatsConstructor(uiRoot)
+    const fullscreenBtn = FullScreenPanelControllerConstructor(window.document.documentElement, document.body)
+    const turnPanel = TurnPanelControllerConstructor(uiRoot)
     const commandPanel = CommandPanelControllerConstructor(ownerProxy)
     const tileInfoPanel = TileInfoPanelControllerConstructor(ownerProxy)
-
+    //
     const uiComponents = [stats, fullscreenBtn, turnPanel, commandPanel, tileInfoPanel]
 
     return {
@@ -36,7 +34,7 @@ export const UIConstructor = () => {
             ownerProxy.cmd = commands
         },
         /** @return {Element} */
-        get root() { return root },
+        get root() { return uiRoot },
         /** @return {Element} */
         get canvas() { return gameCanvas },
         /** update all UI panels */

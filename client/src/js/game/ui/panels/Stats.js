@@ -105,7 +105,7 @@ export const StatsConstructor = (parent) => {
 const Panel = function ( name, fg, bg ) {
 
     let min = Infinity, max = 0, round = Math.round;
-    const PR = 1.5;
+    const PR = 1;
 
     var WIDTH = 80 * PR, HEIGHT = 48 * PR,
         TEXT_X = 3 * PR, TEXT_Y = 2 * PR,
