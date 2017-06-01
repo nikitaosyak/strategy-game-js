@@ -9,9 +9,10 @@ export const UIUtils = {
      * @param {string} id
      * @param {Element} parent
      * @param {*} styleParams
+     * @param {string} cssClass
      * @return {Element}
      */
-    createElement: (tag, id, parent = null, styleParams = null) => {
+    createElement: (tag, id, parent = null, styleParams = null, cssClass = null) => {
         const el = document.createElement(tag)
         el.id = id
         if (parent === null || parent === undefined) {
@@ -24,6 +25,10 @@ export const UIUtils = {
             for (const key in styleParams) {
                 el.style[key] = styleParams[key]
             }
+        }
+
+        if (cssClass !== null && cssClass !== undefined) {
+            el.className = cssClass
         }
         return el
     }

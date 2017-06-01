@@ -1,4 +1,9 @@
+/**
+ * @param owner
+ * @constructor
+ */
 import {UIUtils} from "./UIUtils";
+import {ButtonConstructor} from "./components/Button";
 export const StatusPanelState = {
     GLOBAL: 'GLOBAL',
     SELECTOR: 'SELECTOR',
@@ -7,19 +12,21 @@ export const StatusPanelState = {
     UNIT: 'UNIT'
 }
 
-/**
- * @param owner
- * @return {{showState, onOrientationChange: (function(*)), update: (function())}}
- * @constructor
- */
 export const MainPanelConstructor = (owner) => {
 
     let showState = StatusPanelState.GLOBAL
 
     const variations = {
-        'horizontal': UIUtils.createElement('div', 'uiMainPanelHorizontal', owner.root),
-        'vertical': UIUtils.createElement('div', 'uiMainPanelVertical', owner.root)
+        parentDiv: {
+            'horizontal': UIUtils.createElement('div', 'uiMainPanelHorizontal', owner.root, {display: 'none'}),
+            'vertical': UIUtils.createElement('div', 'uiMainPanelVertical', owner.root, {display: 'none'})
+        }
     }
+    variations[StatusPanelState.GLOBAL] = {
+    }
+
+    ButtonConstructor(variations.parentDiv.vertical, './assets/ui/fullscreen_expand.png', () => console.log('kek'))
+    ButtonConstructor(variations.parentDiv.vertical, './assets/ui/fullscreen_expand.png', () => console.log('brekekek'))
 
     /** @type {Element} */
     let current
@@ -27,9 +34,9 @@ export const MainPanelConstructor = (owner) => {
     return {
         get showState() { return showState },
         onOrientationChange: (orientation) => {
-            current = variations[orientation]
+            current = variations.parentDiv[orientation]
             current.style.display = 'block'
-            variations[UIUtils.oppositeOrientation[orientation]].style.display = 'none'
+            variations.parentDiv[UIUtils.oppositeOrientation[orientation]].style.display = 'none'
         },
         update: () => {
 

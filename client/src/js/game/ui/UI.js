@@ -36,6 +36,7 @@ export const UIConstructor = () => {
         },
         /** update all UI panels */
         update: () => {
+            stats.update()
             main.update()
         }
     }
