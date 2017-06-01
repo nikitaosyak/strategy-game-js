@@ -1,4 +1,9 @@
 export const UIUtils = {
+    oppositeOrientation: {
+        'vertical': 'horizontal',
+        'horizontal': 'vertical'
+    },
+
     /**
      * @param {string} tag
      * @param {string} id

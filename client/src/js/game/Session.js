@@ -33,7 +33,9 @@ export const SessionConstructor = (connection, rawSessionData) => {
         input.update()
 
         es.update()
-        renderer.update()
+        if (renderer.update()) {
+            ui.onOrientationChange(renderer.orientation)
+        }
     }
 
     const _gameTurn = () => {

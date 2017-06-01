@@ -14,14 +14,15 @@ html, body
   margin 0
   overflow hidden
 
-#uiRoot
-  position fixed
-  width 100%
-  height 100%
-  left: 0
-  top: 0
+.button
+  position relative
   z-index 1
-  pointer-events none
+  margin 2px
+  width 100px
+  height 100px
+  border none
+  background-size 100%
+  pointer-events all
 
 #uiStats
   base()
@@ -35,21 +36,24 @@ html, body
   margin 0
   pointer-events all
 
-#uiTurnPanel
-  base()
-  top 0
-  right 5%
-  left 5%
-  height 1%
-  background red
-  opacity 0.3
+#uiMainPanelVertical
+  position fixed
+  z-index 1
+  bottom 0
+  width 100%
+  height 110px
+  pointer-events none
+  background-color aqua
 
-#uiFullScreenPanel
-  base()
-  right 1px
-  bottom 1px
-  width: 75px
-  height 75px
+#uiMainPanelHorizontal
+  position fixed
+  z-index 1
+  right 0
+  top 0
+  height 100%
+  width 30%
+  pointer-events none
+  background-color aqua
 
 #uiFullScreenBtnExpand
   background url('./assets/ui/fullscreen_expand.png') no-repeat
