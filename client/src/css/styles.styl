@@ -1,32 +1,21 @@
-base(zIndex = 1)
-  position absolute
-  z-index zIndex
-
-divButton()
-  width 100%
-  height 100%
-  margin 0 auto
-  border none
-  background-size 100%
-  pointer-events all
-
 html, body
   margin 0
   overflow hidden
 
 .button
-  position relative
+  display block
   z-index 1
   padding 0
   margin 0 auto
-  width 80px
-  height 80px
+  width 60px
+  height 60px
   border none
   background-size 100%
   pointer-events all
 
 #uiStats
-  base()
+  position fixed
+  z-index 1
   top 0; left 0
   opacity 0.5
 
@@ -42,7 +31,7 @@ html, body
   z-index 1
   bottom 0
   width 100%
-  height 80px
+  height 60px
   pointer-events none
   background-color aqua
 
@@ -55,11 +44,3 @@ html, body
   width 30%
   pointer-events none
   background-color aqua
-
-#uiFullScreenBtnExpand
-  background url('./assets/ui/fullscreen_expand.png') no-repeat
-  divButton()
-
-#uiFullScreenBtnCollapse
-  background url('./assets/ui/fullscreen_collapse.png') no-repeat
-  divButton()

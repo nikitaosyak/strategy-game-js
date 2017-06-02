@@ -31,5 +31,28 @@ export const UIUtils = {
             el.className = cssClass
         }
         return el
+    },
+
+    /**
+     * @param {Element} parent
+     * @param {string} icon
+     * @param {Function} onclick
+     * @param {*} additionalCssParams
+     * @return {Element}
+     */
+    createButtonElement: (parent, icon, onclick, additionalCssParams) => {
+        const cssData = {
+            'background' : 'url('+icon+') center center no-repeat',
+            'background-size': '100%'
+        }
+        for (const key in additionalCssParams) {
+            cssData[key] = additionalCssParams[key]
+        }
+
+        const btn = UIUtils.createElement('button', '', parent, cssData, 'button')
+        btn.addEventListener('click', e => {
+            onclick()
+        })
+        return btn
     }
 }

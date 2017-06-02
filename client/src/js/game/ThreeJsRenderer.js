@@ -20,7 +20,7 @@ export const ThreeJsRendererConstructor = (canvasDom, gridHeight) => {
     let orientation
     const resizeCanvas = () => {
         canvasW = Math.max(window.innerWidth || 0, document.documentElement.clientWidth) * (orientation === 'horizontal' ? 0.7 : 1)
-        canvasH = Math.max(window.innerHeight || 0, document.documentElement.clientHeight) - (orientation === 'vertical' ? 80 : 0)
+        canvasH = Math.max(window.innerHeight || 0, document.documentElement.clientHeight) - (orientation === 'vertical' ? 60 : 0)
 
         renderer.setSize(canvasW, canvasH)
         camera.aspect = canvasW / canvasH
