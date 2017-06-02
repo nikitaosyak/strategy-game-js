@@ -34,7 +34,7 @@ export const SessionConstructor = (connection, rawSessionData) => {
 
         es.update()
         if (renderer.update()) {
-            ui.onOrientationChange(renderer.orientation)
+            ui.main.onOrientationChange(renderer.orientation)
         }
     }
 

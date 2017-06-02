@@ -38,7 +38,7 @@ export const ThreeJsRendererConstructor = (canvasDom, gridHeight) => {
             const newCanvasH = Math.max(window.innerHeight || 0, document.documentElement.clientHeight)
             let oldOrientation = orientation
             if (newCanvasW !== canvasW || newCanvasH !== canvasH) {
-                orientation = newCanvasW < newCanvasH ? 'vertical' : 'horizontal'
+                orientation = 'vertical'//newCanvasW < newCanvasH ? 'vertical' : 'horizontal'
                 resizeCanvas()
             }
             renderer.render(scene, camera)

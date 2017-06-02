@@ -62,6 +62,10 @@ export const HexagonEntity = (name) => {
             state.children.splice(index, 1)
         },
 
+        getAllChildren() {
+            return state.children
+        },
+
         //
         // tree.js raycast helper
         raycast(raycaster, intersects) {

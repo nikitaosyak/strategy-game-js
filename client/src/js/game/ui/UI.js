@@ -30,10 +30,9 @@ export const UIConstructor = () => {
         get root() { return ownerProxy.root },
         /** @return {Element} */
         get canvas() { return gameCanvas },
+        /** @return {MainPanelConstructor} */
+        get main() { return main },
 
-        onOrientationChange: (orientation) => {
-            main.onOrientationChange(orientation)
-        },
         /** update all UI panels */
         update: () => {
             stats.update()

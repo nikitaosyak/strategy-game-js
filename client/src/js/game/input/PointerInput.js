@@ -35,15 +35,20 @@ export const PointerInputConstructor = (canvas) => {
     const onTouchMove = (e, deviceType) => {
         e.preventDefault()
 
-        _state.downMove = _state.isDown
         switch (deviceType) {
             case 'computer':
+                _state.downMove = _state.isDown
                 _state.frameAnchor.x = e.clientX
                 _state.frameAnchor.y = e.clientY
                 break
             case 'mobile':
                 _state.frameAnchor.x = e.touches.item(0).clientX
                 _state.frameAnchor.y = e.touches.item(0).clientY
+                if (!_state.downMove) {
+                    const dx = Math.abs(_state.downAnchor.x - _state.frameAnchor.x)
+                    const dy = Math.abs(_state.downAnchor.y - _state.frameAnchor.y)
+                    _state.downMove = dx > 0.01 || dy > 0.01
+                }
                 break
             default:
                 throw "Unknown device type: " + deviceType

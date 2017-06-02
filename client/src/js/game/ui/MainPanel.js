@@ -4,26 +4,35 @@
  */
 import {UIUtils} from "./UIUtils";
 import {GlobalPanelConstructor} from "./panels/GlobalPanel";
-export const StatusPanelState = {
+import {MockupPanelConstructor} from "./panels/MockupPanel";
+export const MainPanelState = {
     GLOBAL: 'GLOBAL',
     SELECTOR: 'SELECTOR',
     TILE: 'TILE',
-    STRUCTURE: 'STRUCTURE',
-    UNIT: 'UNIT'
+    COMMAND: 'COMMAND',
 }
 
 export const MainPanelConstructor = (owner) => {
 
-    let showState = StatusPanelState.GLOBAL
+    let showState = MainPanelState.GLOBAL
 
     const variations = {
         parentDiv: {
-            'horizontal': UIUtils.createElement('div', 'uiMainPanelHorizontal', owner.root, {display: 'none'}),
-            'vertical': UIUtils.createElement('div', 'uiMainPanelVertical', owner.root, {display: 'none'})
+            'vertical': UIUtils.createElement('div', 'uiMainPanelVertical', owner.root, {display: 'none'}),
+            'horizontal': UIUtils.createElement('div', 'uiMainPanelHorizontal', owner.root, {display: 'none'})
         }
     }
-    variations[StatusPanelState.GLOBAL] = {
+    variations[MainPanelState.GLOBAL] = {
         'vertical': GlobalPanelConstructor(owner, variations.parentDiv.vertical)
+    }
+    variations[MainPanelState.SELECTOR] = {
+        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'selector')
+    }
+    variations[MainPanelState.TILE] = {
+        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'tile')
+    }
+    variations[MainPanelState.COMMAND] = {
+        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'command')
     }
 
     /** @type {Element} */
@@ -33,21 +42,25 @@ export const MainPanelConstructor = (owner) => {
 
     return {
         get showState() { return showState },
-        setShowState(value) {
+        setShowState(value, context = null) {
             if (value === showState) {
-                console.warn('additional state show for some reason: ' + value)
-                return
+                if (context === null || context === undefined) return
+            } else {
+                variations[showState][currentOrientation].hide()
             }
-            variations[value][currentOrientation].hide()
+
             showState = value
             variations[showState][currentOrientation].show()
+            if (context !== null && context !== undefined) {
+                variations[showState][currentOrientation].injectContext(context)
+            }
         },
         onOrientationChange: (orientation) => {
+            console.log('orientation chaged: ' + orientation)
             currentOrientation = orientation
-            currentMain = variations.parentDiv.vertical
-            // current = variations.parentDiv[orientation]
+            currentMain = variations.parentDiv[orientation]
             currentMain.style.display = 'block'
-            // variations.parentDiv[UIUtils.oppositeOrientation[orientation]].style.display = 'none'
+            variations.parentDiv[UIUtils.oppositeOrientation[orientation]].style.display = 'none'
         },
         update: () => {
 

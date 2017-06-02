@@ -12,8 +12,8 @@ export const IntersectorConstructor = (camera) => {
         get selection() { return selected },
 
         test: (objects, pointer, domElement) => {
-            vectorPointer.x = (pointer.x / domElement.width) * 2 - 1
-            vectorPointer.y = -(pointer.y / domElement.height) * 2 + 1
+            vectorPointer.x = ((pointer.x * window.devicePixelRatio) / domElement.width) * 2 - 1
+            vectorPointer.y = -((pointer.y * window.devicePixelRatio) / domElement.height) * 2 + 1
 
             raycaster.setFromCamera(vectorPointer, camera)
 

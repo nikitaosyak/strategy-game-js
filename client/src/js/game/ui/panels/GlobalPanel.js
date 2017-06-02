@@ -4,7 +4,11 @@ import {FullScreenButtonConstructor} from "../components/FullscreenButton";
 export const GlobalPanelConstructor = (owner, parent) => {
 
     const state = {
-        element: UIUtils.createElement('div', 'uiGlobalPanel', parent, null, 'panelDiv')
+        active: false,
+        element: UIUtils.createElement('div', 'uiGlobalPanel', parent, null, 'panelDiv'),
+        invalidateView: () => {
+            // nothing to do here, but required
+        }
     }
 
     FullScreenButtonConstructor(owner.fullscreenElement, state.element)
