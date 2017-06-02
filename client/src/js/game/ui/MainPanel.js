@@ -3,7 +3,7 @@
  * @constructor
  */
 import {UIUtils} from "./UIUtils";
-import {FullScreenButtonConstructor} from "./components/FullscreenButton";
+import {GlobalPanelConstructor} from "./panels/GlobalPanel";
 export const StatusPanelState = {
     GLOBAL: 'GLOBAL',
     SELECTOR: 'SELECTOR',
@@ -23,22 +23,30 @@ export const MainPanelConstructor = (owner) => {
         }
     }
     variations[StatusPanelState.GLOBAL] = {
+        'vertical': GlobalPanelConstructor(owner, variations.parentDiv.vertical)
     }
 
-    FullScreenButtonConstructor(owner.fullscreenElement, variations.parentDiv.vertical)
-
     /** @type {Element} */
-    let current
+    let currentMain
+    /** @type {String} */
+    let currentOrientation
 
     return {
         get showState() { return showState },
         setShowState(value) {
+            if (value === showState) {
+                console.warn('additional state show for some reason: ' + value)
+                return
+            }
+            variations[value][currentOrientation].hide()
             showState = value
+            variations[showState][currentOrientation].show()
         },
         onOrientationChange: (orientation) => {
-            current = variations.parentDiv.vertical
+            currentOrientation = orientation
+            currentMain = variations.parentDiv.vertical
             // current = variations.parentDiv[orientation]
-            current.style.display = 'block'
+            currentMain.style.display = 'block'
             // variations.parentDiv[UIUtils.oppositeOrientation[orientation]].style.display = 'none'
         },
         update: () => {
