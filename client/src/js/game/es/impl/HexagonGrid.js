@@ -49,6 +49,7 @@ export const HexagonGridConstructor = (template) => {
 	    get visualRoot() { return state.root },
         get utils() { return state.utils },
         get children() { return state.children },
+        get currentAngle() { return state.root.rotation.y },
         rotate: (angleRad) => { state.root.rotation.y += angleRad },
         setAngle: (angleRad) => { state.root.rotation.y = angleRad }
     }

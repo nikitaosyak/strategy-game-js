@@ -1,9 +1,8 @@
-export const IntersectorConstructor = (camera) => {
+export const IntersectorConstructor = (utils) => {
 
     let selected = -1
 
     const raycaster = new THREE.Raycaster()
-    const vectorPointer = new THREE.Vector2()
 
     return {
         /** @returns {boolean} */
@@ -11,11 +10,8 @@ export const IntersectorConstructor = (camera) => {
         /** @returns {Number} selected component index or -1 */
         get selection() { return selected },
 
-        test: (objects, pointer, domElement) => {
-            vectorPointer.x = ((pointer.x * window.devicePixelRatio) / domElement.width) * 2 - 1
-            vectorPointer.y = -((pointer.y * window.devicePixelRatio) / domElement.height) * 2 + 1
-
-            raycaster.setFromCamera(vectorPointer, camera)
+        test: (objects, pointer) => {
+            utils.pointerToRay(pointer, raycaster.ray)
 
             const result = raycaster.intersectObjects(objects, false)
             if (result.length > 0) {

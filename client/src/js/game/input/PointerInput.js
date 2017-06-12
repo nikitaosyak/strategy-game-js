@@ -1,31 +1,31 @@
 import {Input} from "./CanvasInput";
 
-export const PointerInputConstructor = (canvas) => {
-    const _state = {
+export const PointerInputConstructor = (utils) => {
+    const state = {
         isDown: false,
         clickInfo: {click: false, x: 0, y: 0},
         target: null,
         downMove: false,
-        downAnchor: {x: Number.NaN, y: Number.NaN},
         frameAnchor: {x: Number.NaN, y: Number.NaN},
+        frameCurrent: {x: Number.NaN, y: Number.NaN},
         delta: {x: 0, y: 0}
     }
 
     const onTouchStart = (e, deviceType) => {
         e.preventDefault()
 
-        _state.clickInfo.click = false
-        _state.isDown = true
-        _state.target = Input.SessionInputTarget.CANVAS
+        state.clickInfo.click = false
+        state.isDown = true
+        state.target = Input.SessionInputTarget.CANVAS
 
         switch (deviceType) {
             case 'computer':
-                _state.clickInfo.x = _state.downAnchor.x = _state.frameAnchor.x = e.clientX
-                _state.clickInfo.y = _state.downAnchor.y = _state.frameAnchor.y = e.clientY
+                state.clickInfo.x = state.frameAnchor.x = state.frameCurrent.x = e.clientX
+                state.clickInfo.y = state.frameAnchor.y = state.frameCurrent.y = e.clientY
                 break
             case 'mobile':
-                _state.clickInfo.x = _state.downAnchor.x = _state.frameAnchor.x = e.touches.item(0).clientX
-                _state.clickInfo.y = _state.downAnchor.y = _state.frameAnchor.y = e.touches.item(0).clientY
+                state.clickInfo.x = state.frameAnchor.x = state.frameCurrent.x = e.touches.item(0).clientX
+                state.clickInfo.y = state.frameAnchor.y = state.frameCurrent.y = e.touches.item(0).clientY
                 break
             default:
                 throw "Unknown device type: " + deviceType
@@ -37,55 +37,57 @@ export const PointerInputConstructor = (canvas) => {
 
         switch (deviceType) {
             case 'computer':
-                _state.downMove = _state.isDown
-                _state.frameAnchor.x = e.clientX
-                _state.frameAnchor.y = e.clientY
+                state.downMove = state.isDown
+                state.frameCurrent.x = e.clientX
+                state.frameCurrent.y = e.clientY
                 break
             case 'mobile':
-                _state.frameAnchor.x = e.touches.item(0).clientX
-                _state.frameAnchor.y = e.touches.item(0).clientY
-                if (!_state.downMove) {
-                    const dx = Math.abs(_state.downAnchor.x - _state.frameAnchor.x)
-                    const dy = Math.abs(_state.downAnchor.y - _state.frameAnchor.y)
-                    _state.downMove = dx > 0.01 || dy > 0.01
+                state.frameCurrent.x = e.touches.item(0).clientX
+                state.frameCurrent.y = e.touches.item(0).clientY
+                if (!state.downMove) {
+                    const dx = Math.abs(state.frameAnchor.x - state.frameCurrent.x)
+                    const dy = Math.abs(state.frameAnchor.y - state.frameCurrent.y)
+                    state.downMove = dx > 0.01 || dy > 0.01
                 }
                 break
             default:
                 throw "Unknown device type: " + deviceType
         }
-        _state.delta.x = _state.frameAnchor.x - _state.downAnchor.x
-        _state.delta.y = _state.downAnchor.y - _state.frameAnchor.y
+        state.delta.x = state.frameCurrent.x - state.frameAnchor.x
+        state.delta.y = state.frameAnchor.y - state.frameCurrent.y
     }
 
     const onTouchEnd = (e) => {
         e.preventDefault()
 
-        _state.clickInfo.click = !_state.downMove
-        _state.isDown = _state.downMove = false
-        _state.target = null
+        state.clickInfo.click = !state.downMove
+        state.isDown = state.downMove = false
+        state.target = null
     }
 
-    canvas.ontouchstart = (e) => onTouchStart(e, 'mobile')
-    canvas.ontouchmove = (e) => onTouchMove(e, 'mobile')
-    canvas.ontouchend = onTouchEnd
+    utils.domElement.ontouchstart = (e) => onTouchStart(e, 'mobile')
+    utils.domElement.ontouchmove = (e) => onTouchMove(e, 'mobile')
+    utils.domElement.ontouchend = onTouchEnd
 
-    canvas.onmousedown = (e) => onTouchStart(e, 'computer')
-    canvas.onmousemove = (e) => onTouchMove(e, 'computer')
-    canvas.onmouseup = onTouchEnd
+    utils.domElement.onmousedown = (e) => onTouchStart(e, 'computer')
+    utils.domElement.onmousemove = (e) => onTouchMove(e, 'computer')
+    utils.domElement.onmouseup = onTouchEnd
 
     return {
-        get target() { return _state.target },
-        get wasMove() { return _state.downMove },
-        get lastClick() { return _state.clickInfo },
-        get dx() { return _state.delta.x },
-        get dy() { return _state.delta.y },
+        get isDown() { return state.isDown },
+        get target() { return state.target },
+        get wasMove() { return state.downMove },
+        get clickInfo() { return state.clickInfo },
+        get frameAnchor() { return state.frameAnchor },
+        get dx() { return state.delta.x },
+        get dy() { return state.delta.y },
 
         cleanup: () => {
-            _state.downAnchor.x = _state.frameAnchor.x
-            _state.downAnchor.y = _state.frameAnchor.y
-            _state.delta.x = _state.delta.y = 0
+            state.frameAnchor.x = state.frameCurrent.x
+            state.frameAnchor.y = state.frameCurrent.y
+            state.delta.x = state.delta.y = 0
 
-            _state.clickInfo.click = false
+            state.clickInfo.click = false
         },
     }
 }
