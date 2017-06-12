@@ -33,9 +33,9 @@ export const HexagonEntity = (name) => {
                 const offsetY = 0.38 * Math.sin(Math.PI * 0.33 * angleIndex)
                 childMesh.position.x = offsetX
                 childMesh.position.y = offsetY
+                angleIndex += 1
             }
 
-            angleIndex += 1
         })
     }
 
