@@ -114,12 +114,12 @@ export const SessionConstructor = (connection, rawSessionData) => {
                 cmd.serializer
                     .begin()
                     .add()
-                    .cmd('create', 'structure', 'base', 'pohui')
+                    .cmd('create', 'structure', 'base', 'summoner')
                     .data('location', myStartLocation)
                 cmd.serializer
                     .add()
                     .cmd('create', 'unit', 'ork', 'вася')
-                    .data('location', myStartLocation+1)
+                    .data('location', myStartLocation+2)
                 cmd.serializer
                     .add()
                     .cmd('create', 'unit', 'human', 'коля')
@@ -128,18 +128,30 @@ export const SessionConstructor = (connection, rawSessionData) => {
                     .add()
                     .cmd('create', 'unit', 'human', 'петя')
                     .data('location', myStartLocation-1)
-                // cmd.serializer
-                //     .add()
-                //     .cmd('create', 'unit', 'ork', 'димон')
-                //     .data('location', myStartLocation-1)
-                // cmd.serializer
-                //     .add()
-                //     .cmd('create', 'unit', 'human', 'серега')
-                //     .data('location', myStartLocation-1)
-                // cmd.serializer
-                //     .add()
-                //     .cmd('create', 'unit', 'ork', 'фандорин')
-                //     .data('location', myStartLocation-1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'ork', 'самсон')
+                    .data('location', myStartLocation+1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'human', 'тур')
+                    .data('location', myStartLocation+1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'ork', 'эспада')
+                    .data('location', myStartLocation+1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'human', 'фуфел')
+                    .data('location', myStartLocation+1)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'human', 'пёсик')
+                    .data('location', myStartLocation)
+                cmd.serializer
+                    .add()
+                    .cmd('create', 'unit', 'ork', 'котик')
+                    .data('location', myStartLocation)
                 cmd.performLocal()
 
                 _gameUpdater()

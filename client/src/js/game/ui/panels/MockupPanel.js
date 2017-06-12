@@ -8,7 +8,12 @@ export const MockupPanelConstructor = (parent, mockupName) => {
         context: null,
         element: UIUtils.createElement('div', mockupName, parent, {display: 'none'}, 'panelDiv'),
         invalidateView: () => {
-            // console.log(state.active, state.context)
+            console.log(state.active, state.context)
+            if (mockupName === 'command') {
+                if (state.context !== null) {
+                    state.element.innerHTML = 'command to ' + state.context.type + ' ' + state.context.name
+                }
+            }
         }
     }
 
