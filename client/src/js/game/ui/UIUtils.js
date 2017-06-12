@@ -50,6 +50,10 @@ export const UIUtils = {
         }
 
         const btn = UIUtils.createElement('button', '', parent, cssData, 'button')
+        btn.setBackground = (value) => {
+            btn.style.background = 'url('+value+') center center no-repeat'
+            btn.style['background-size'] = '100%'
+        }
         btn.addEventListener('click', e => {
             onclick()
         })

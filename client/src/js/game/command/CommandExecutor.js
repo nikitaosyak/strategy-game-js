@@ -1,12 +1,13 @@
-import {GameEntityConstructor} from "../es/impl/GameEntity";
+import {GameEntityConstructor, GameEntityTemplateConstructor} from "../es/impl/GameEntity";
 import {ThreejsComponentConstructor} from "../es/impl/ThreejsComponent";
 export const CommandExecutor = (grid) => {
 
     const verbRouter = {
         create: (cmd) => {
-            const entity = GameEntityConstructor(cmd.entity_name, cmd.entity_type, cmd.user_token)
-            const visual = entity.addComponent('visual', ThreejsComponentConstructor('visual_' + cmd.entity_name))
-            switch (cmd.entity_class) {
+            const eTemplate = GameEntityTemplateConstructor(cmd.entity_name, cmd.entity_type, cmd.entity_class)
+            const entity = GameEntityConstructor(eTemplate, cmd.user_token)
+            const visual = entity.addComponent('visual', ThreejsComponentConstructor('visual_' + eTemplate.name))
+            switch (eTemplate.class) {
                 case 'base':
                     visual.debugCube(0.3, 0.3, 0.3, new THREE.Color(1, 1, 1))
                     break

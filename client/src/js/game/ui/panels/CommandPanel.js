@@ -9,7 +9,7 @@ export const CommandPanelConstructor = (parent) => {
         element: UIUtils.createElement('div', 'uiCommandPanel', parent, {display: 'none'}, 'panelDiv'),
         invalidateView: () => {
             if (state.context === null) return
-            state.element.innerHTML = 'command to ' + state.context.type + ' ' + state.context.name
+            state.element.innerHTML = 'command to ' + state.context.template.type + ' ' + state.context.name
         }
     }
 

@@ -14,6 +14,9 @@ export const SelectorPanelConstructor = (parent, selectorCallback, cancelBehavio
             if (state.context === null) return
             for (let i = 0; i < 4; i++) {
                 if (i < state.context.length) {
+                    const t = state.context[i].template
+                    // console.log(selectionButtons[i])
+                    selectionButtons[i].setBackground('./assets/ui/stillIcons/' + t.type + '/' + t.class + '.png')
                     selectionButtons[i].style.display = 'inline-block'
                     // todo: extract context item and render appropriate icon
                     // icon background, possible overlay, exclude drained entities

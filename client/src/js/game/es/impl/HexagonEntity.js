@@ -28,7 +28,7 @@ export const HexagonEntity = (name) => {
             const childHeight = childMesh.geometry.boundingBox.max.z - childMesh.geometry.boundingBox.min.z
             childMesh.position.z = childHeight/2
 
-            if (ch.type === 'unit') {
+            if (ch.template.type === 'unit') {
                 const offsetX = 0.38 * Math.cos(Math.PI * 0.33 * angleIndex)
                 const offsetY = 0.38 * Math.sin(Math.PI * 0.33 * angleIndex)
                 childMesh.position.x = offsetX

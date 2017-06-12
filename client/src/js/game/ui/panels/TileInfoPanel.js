@@ -14,7 +14,6 @@ export const TileInfoPanelConstructor = (parent, cancelBehaviour) => {
         element: panel,
         invalidateView: () => {
             if (state.context === null) return
-            console.log(state.context)
             const comp = state.context.getComponent('logic')
             infoComp.setInfo(
                 comp.templateData.debugName,
