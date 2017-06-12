@@ -4,9 +4,9 @@
  */
 import {UIUtils} from "./UIUtils";
 import {GlobalPanelConstructor} from "./panels/GlobalPanel";
-import {MockupPanelConstructor} from "./panels/MockupPanel";
 import {TileInfoPanelConstructor} from "./panels/TileInfoPanel";
 import {SelectorPanelConstructor} from "./panels/SelectorPanel";
+import {CommandPanelConstructor} from "./panels/CommandPanel";
 export const MainPanelState = {
     GLOBAL: 'GLOBAL',
     SELECTOR: 'SELECTOR',
@@ -70,7 +70,7 @@ export const MainPanelConstructor = (owner) => {
         'vertical': TileInfoPanelConstructor(variations.parentDiv.vertical, cancelBehaviour)
     }
     variations[MainPanelState.COMMAND] = {
-        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'command')
+        'vertical': CommandPanelConstructor(variations.parentDiv.vertical)
     }
 
     return self
