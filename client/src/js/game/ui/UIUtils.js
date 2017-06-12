@@ -40,7 +40,7 @@ export const UIUtils = {
      * @param {*} additionalCssParams
      * @return {Element}
      */
-    createButtonElement: (parent, icon, onclick, additionalCssParams) => {
+    createButtonElement: (parent, icon, onclick, additionalCssParams = null) => {
         const cssData = {
             'background' : 'url('+icon+') center center no-repeat',
             'background-size': '100%'

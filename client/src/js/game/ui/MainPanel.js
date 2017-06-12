@@ -5,6 +5,7 @@
 import {UIUtils} from "./UIUtils";
 import {GlobalPanelConstructor} from "./panels/GlobalPanel";
 import {MockupPanelConstructor} from "./panels/MockupPanel";
+import {TileInfoPanelConstructor} from "./panels/TileInfoPanel";
 export const MainPanelState = {
     GLOBAL: 'GLOBAL',
     SELECTOR: 'SELECTOR',
@@ -22,25 +23,13 @@ export const MainPanelConstructor = (owner) => {
             'horizontal': UIUtils.createElement('div', 'uiMainPanelHorizontal', owner.root, {display: 'none'})
         }
     }
-    variations[MainPanelState.GLOBAL] = {
-        'vertical': GlobalPanelConstructor(owner, variations.parentDiv.vertical)
-    }
-    variations[MainPanelState.SELECTOR] = {
-        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'selector')
-    }
-    variations[MainPanelState.TILE] = {
-        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'tile')
-    }
-    variations[MainPanelState.COMMAND] = {
-        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'command')
-    }
 
     /** @type {Element} */
     let currentMain
     /** @type {String} */
     let currentOrientation
 
-    return {
+    const self = {
         get showState() { return showState },
         setShowState(value, context = null) {
             if (value === showState) {
@@ -66,4 +55,20 @@ export const MainPanelConstructor = (owner) => {
 
         }
     }
+
+    variations[MainPanelState.GLOBAL] = {
+        'vertical': GlobalPanelConstructor(owner, variations.parentDiv.vertical)
+    }
+    variations[MainPanelState.SELECTOR] = {
+        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'selector')
+    }
+    variations[MainPanelState.TILE] = {
+        'vertical': TileInfoPanelConstructor(variations.parentDiv.vertical,
+            () => self.setShowState(MainPanelState.GLOBAL))
+    }
+    variations[MainPanelState.COMMAND] = {
+        'vertical': MockupPanelConstructor(variations.parentDiv.vertical, 'command')
+    }
+
+    return self
 }

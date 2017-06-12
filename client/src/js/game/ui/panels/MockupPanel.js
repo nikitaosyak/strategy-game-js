@@ -7,7 +7,9 @@ export const MockupPanelConstructor = (parent, mockupName) => {
         active: false,
         context: null,
         element: UIUtils.createElement('div', mockupName, parent, {display: 'none'}, 'panelDiv'),
-        invalidateView: () => {}
+        invalidateView: () => {
+            // console.log(state.active, state.context)
+        }
     }
 
     state.element.innerHTML = mockupName

@@ -1,6 +1,29 @@
 import {componentGetName, componentGetNeighbour, componentInjectOwner} from "../componentBehaviours";
 import {debugTraceState} from "../../../util/behaviours";
 
+export const TEMPLATES = {
+    0: {
+        debugName: 'PLAIN',
+        debugColor: 0xFFFFFF,
+        walkable: true
+    },
+    1: {
+        debugName: 'BASE',
+        debugColor: 0xCC0000,
+        walkable: true
+    },
+    10: {
+        debugName: 'RESOURCE',
+        debugColor: 0x0000CC,
+        walkable: false
+    },
+    20: {
+        debugName: 'WALL',
+        debugColor: 0x000000,
+        walkable: false
+    }
+}
+
 /**
  * @param name
  * @param index
@@ -16,36 +39,13 @@ export const HexagonComponentConstructor = (name, index, template) => {
 
     const self = {
         get index() { return state.index },
-        get debugTemplate() {
-            switch (state.template) {
-                case 0: return 'PLAIN'
-                case 1: return 'START'
-                case 10: return 'RESOURCE'
-                case 20: return 'WALL'
-                default: return 'UNKNOWN'
-            }
-        },
+        get templateData() { return TEMPLATES[state.template] },
+        get currentResource() { return state.template === 10 ? 200 : 0 },
         init: () => {
             const visual = self.getNeighbour('visual')
 
             if (visual.isLoaded) {
-                switch (state.template) {
-                    case 0: // empty
-                        visual.mesh.material.color.setHex(0xFFFFFF)
-                        break
-                    case 1: // start point
-                        visual.mesh.material.color.setHex(0xCC0000)
-                        break
-                    case 10: // resource point
-                        visual.mesh.material.color.setHex(0x0000CC)
-                        break
-                    case 20: // wall point
-                        visual.mesh.material.color.setHex(0x000000)
-                        break
-                    default:
-                        throw 'Hexagon.init: unknown hexagon template'
-                        break
-                }
+                visual.mesh.material.color.setHex(TEMPLATES[state.template].debugColor)
             } else {
                 throw 'Cannot init before visual loaded'
             }
